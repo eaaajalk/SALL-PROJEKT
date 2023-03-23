@@ -1,16 +1,23 @@
 package application.model;
 
+import java.time.LocalDate;
+
 public class Fad {
-    private String fadHistorik;
-    private String tidligereLeverandør;
+    private String ID;
+    private String fadType;
     private String str;
+    private String kommentar;
     private Hylde hylde;
     private String plads;
+    private LocalDate lagerDato;
 
-    public Fad (String fadHistorik, String tidligereLeverandør, String str) {
-        this.fadHistorik = fadHistorik;
-        this.tidligereLeverandør = tidligereLeverandør;
+
+    public Fad(String ID, String fadType, String str, String kommentar, LocalDate lagerDato) {
+        this.ID = ID;
+        this.fadType = fadType;
         this.str = str;
+        this.kommentar = kommentar;
+        this.lagerDato = lagerDato;
     }
 
     public void setHylde(Hylde hylde) {
@@ -35,7 +42,25 @@ public class Fad {
     public void setPlads(String plads) {
         this.plads = plads;
     }
+
+    public void setLagerDato(LocalDate lagerDato) {
+        this.lagerDato = lagerDato;
+    }
+
+    public String getKommentar() {
+        return kommentar;
+    }
+
+    public void setKommentar(String kommentar) {
+        this.kommentar = kommentar;
+    }
+
     public String getFadPlacering () {
         return "Hylde: " + getHylde().getHyldeNr() + " Plads: " + getPlads();
+    }
+
+    @Override
+    public String toString() {
+        return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getPlads();
     }
 }

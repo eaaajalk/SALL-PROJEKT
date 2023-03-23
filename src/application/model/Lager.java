@@ -34,4 +34,9 @@ public class Lager {
     }
     }
 
+    @Override
+    public String toString() {
+        return navn;
+    }
+
 }

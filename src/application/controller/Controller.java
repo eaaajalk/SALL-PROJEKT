@@ -5,6 +5,7 @@ import application.model.Hylde;
 import application.model.Lager;
 import storage.Storage;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Controller {
@@ -71,8 +72,8 @@ public class Controller {
      * Opretter nyt Fad.<br />
      * Requires:
      */
-    public static Fad createFad(String fadHistorik, String tidligereLeverandør, String str) {
-        Fad fad = new Fad(fadHistorik, tidligereLeverandør, str);
+    public static Fad createFad(String ID, String fadType, String str, String kommentar, LocalDate lagerDato) {
+        Fad fad = new Fad(ID, fadType, str, kommentar, lagerDato);
         Storage.addFad(fad);
         return fad;
     }
@@ -96,9 +97,10 @@ public class Controller {
     /**
      * Placerer et fad på en hylde og en plads
      */
-    public static void placerFad(Hylde hylde, String Plads, Fad fad){
+    public static void placerFad(Hylde hylde, String Plads, Fad fad, LocalDate placeringsDato){
         fad.setHylde(hylde);
         fad.setPlads(Plads);
+        fad.setLagerDato(placeringsDato);
     }
     /**
      * Fjerner et fad fra en hylde og en hyldeplads
@@ -112,9 +114,9 @@ public class Controller {
     /**
      * Fjerner et fad fra en hylde og en hyldeplads
      */
-    public static void flytFad (Fad fad, Hylde hylde, String Plads){
+    public static void flytFad (Fad fad, Hylde hylde, String Plads, LocalDate flytteDato){
         removeFadFromLager(fad);
-        placerFad(hylde, Plads, fad);
+        placerFad(hylde, Plads, fad, flytteDato);
     }
     // -------------------------------------------------------------------------
 
@@ -135,9 +137,8 @@ public class Controller {
         Hylde h3 = Controller.createHylde(1, l2);
         Hylde h4 = Controller.createHylde(2, l2);
 
-        Fad f1 = Controller.createFad("Bourbon", "Texas", "250L");
-
-        Controller.placerFad(h1, "5", f1);
+        Fad f1 = Controller.createFad("001", "Bourbon", "250L", "Ingen", LocalDate.of(2023, 3, 15));
+        Controller.placerFad(h1, "5", f1, LocalDate.of(2023, 3, 15));
 
     }
         public static void init() {
