@@ -16,8 +16,8 @@ public class Lager {
         return new ArrayList<>(hylder);
     }
 
-    public Hylde createHylde(int hyldeNr, Lager lager) {
-        Hylde hylde = new Hylde(hyldeNr, lager);
+    public Hylde createHylde(int hyldeNr, Lager lager, int antalHyldePladser) {
+        Hylde hylde = new Hylde(hyldeNr, lager, antalHyldePladser);
         hylder.add(hylde);
         return hylde;
     }

@@ -7,18 +7,13 @@ import java.util.ArrayList;
 
 public class Storage {
 
-    private static Storage storage = null;
+    private static ArrayList<Lager> lagere;
+    private static ArrayList<Fad> fade;
 
-    private static ArrayList<Lager> lagere = new ArrayList<>();
-    private static ArrayList<Fad> fade = new ArrayList<>();
 
-    private Storage(){}
-
-    private static Storage getStorage() {
-        if (storage == null){
-            storage = new Storage();
-        }
-        return storage;
+    public Storage () {
+        fade = new ArrayList<>();
+        lagere = new ArrayList<>();
     }
 
     // -------------------------------------------------------------------------

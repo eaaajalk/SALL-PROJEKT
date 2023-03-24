@@ -1,26 +1,24 @@
 package application.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Fad {
     private String ID;
-    private String fadType;
+    private ArrayList<String> fadHistorik = new ArrayList<>();
     private String str;
     private String kommentar;
     private Hylde hylde;
-    private String plads;
     private LocalDate lagerDato;
 
-
-    public Fad(String ID, String fadType, String str, String kommentar, LocalDate lagerDato) {
+    public Fad(String ID, String fadHistorik, String str, String kommentar) {
         this.ID = ID;
-        this.fadType = fadType;
+        this.fadHistorik.add(fadHistorik);
         this.str = str;
         this.kommentar = kommentar;
-        this.lagerDato = lagerDato;
     }
 
-    public void setHylde(Hylde hylde) {
+    public void setHylde(Hylde hylde, int Plads) {
         if (this.hylde != hylde) {
             Hylde oldHylde = this.hylde;
             if (oldHylde != null) {
@@ -28,21 +26,13 @@ public class Fad {
             }
             this.hylde = hylde;
             if (hylde != null)
-                hylde.addFad(this);
+                hylde.addFad(this, Plads);
         }
     }
+
     public Hylde getHylde(){
         return hylde;
     }
-
-    public String getPlads() {
-        return plads;
-    }
-
-    public void setPlads(String plads) {
-        this.plads = plads;
-    }
-
     public void setLagerDato(LocalDate lagerDato) {
         this.lagerDato = lagerDato;
     }
@@ -56,11 +46,11 @@ public class Fad {
     }
 
     public String getFadPlacering () {
-        return "Hylde: " + getHylde().getHyldeNr() + " Plads: " + getPlads();
+        return "Hylde: " + getHylde().getHyldeNr() + " Plads: " + getHylde().getHyldePlads(this);
     }
 
     @Override
     public String toString() {
-        return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getPlads();
+        return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getHylde().getHyldePlads(this);
     }
 }
