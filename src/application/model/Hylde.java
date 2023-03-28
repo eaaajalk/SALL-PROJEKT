@@ -70,4 +70,9 @@ public class Hylde {
         public int getAntalPladser() {
         return antalHyldePladser;
     }
+
+    @Override
+    public String toString(){
+        return String.valueOf(hyldeNr);
+    }
 }

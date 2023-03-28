@@ -1,4 +1,5 @@
 package guifx;
+
 import application.controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,11 +10,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class StartWindow extends Application {
+    private Controller controller;
 
     @Override
     public void init() {
-        Controller.init();
+        controller = Controller.getController();
+        controller.init();
     }
+
 
     @Override
     public void start(Stage stage) {
@@ -37,20 +41,18 @@ public class StartWindow extends Application {
     private void initTabPane(TabPane tabPane) {
         tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-        Tab tabFade = new Tab("Fad Overblik");
+        Tab tabFade = new Tab("Fade");
         tabPane.getTabs().add(tabFade);
 
         FadPane fadPane = new FadPane();
         tabFade.setContent(fadPane);
         tabFade.setOnSelectionChanged(event -> fadPane.updateControls());
 
-        Tab tabLager = new Tab("Lager Overblik");
+        Tab tabLager = new Tab("Lager");
         tabPane.getTabs().add(tabLager);
 
         LagerPane lagerPane = new LagerPane();
         tabLager.setContent(lagerPane);
-        tabLager.setOnSelectionChanged(event -> fadPane.updateControls());
-
-
+        tabLager.setOnSelectionChanged(event -> lagerPane.updateControls());
     }
 }

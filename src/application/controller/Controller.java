@@ -1,19 +1,17 @@
 package application.controller;
 
-import application.model.Fad;
-import application.model.Hylde;
-import application.model.Lager;
+import application.model.*;
 import storage.Storage;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Controller {
-    private static Controller controller = null;
+    private static Controller controller;
     private Storage storage;
     
-    private Controller() { storage = new Storage();}
-
+    private Controller() {
+        storage = Storage.getStorage();
+    }
     
     public static Controller getController() {
         if (controller == null) {
@@ -31,37 +29,37 @@ public class Controller {
      * Opretter nyt lager.<br />
      * Requires: 
      */
-    public static Lager createLager(String navn, String adresse) {
+    public Lager createLager(String navn, String adresse) {
         Lager lager = new Lager(navn, adresse);
-        Storage.addLager(lager);
+        storage.addLager(lager);
         return lager;
     }
     /**
      * Sletter lager<br />
      */
-    public static void deleteLager(Lager lager) {
-        Storage.removeLager(lager);
+    public void deleteLager(Lager lager) {
+        storage.removeLager(lager);
     }
 
     /**
      * Get alle lagere
      */
-    public static ArrayList<Lager> getLagere() {
-        return Storage.getLagere();
+    public  ArrayList<Lager> getLagere() {
+        return storage.getLagere();
     }
     // -------------------------------------------------------------------------
     /**
      * Opretter ny hylde på et lager.<br />
      * Requires: Et lager.
      */
-    public static Hylde createHylde(int hyldeNr, Lager lager, int antalHyldePladser) {
+    public Hylde createHylde(int hyldeNr, Lager lager, int antalHyldePladser) {
         Hylde hylde = lager.createHylde(hyldeNr, lager, antalHyldePladser);
         return hylde;
     }
     /**
      * Sletter hylde fra lager;
      */
-    public static void deleteHylde(Hylde hylde) {
+    public void deleteHylde(Hylde hylde) {
         Lager lager = hylde.getLager();
         if (lager != null) {
             lager.removeHylde(hylde);
@@ -71,30 +69,37 @@ public class Controller {
     /**
      * Opretter nyt Fad.<br />
      */
-    public static Fad createFad(String ID, String fadType, String str, String kommentar) {
-        Fad fad = new Fad(ID, fadType, str, kommentar);
-        Storage.addFad(fad);
-        return fad;
+    public Fad createFad(String ID, String fadType, int str, String kommentar) {
+        if (ID == null || fadType == null || str < 1) {
+            throw new RuntimeException("ID, fadType og str må ikke være null");
+        } else {
+            Fad fad = new Fad(ID, fadType, str, kommentar);
+            storage.addFad(fad);
+            return fad;
+        }
     }
 
     /**
      * Sletter fad.
      */
-    public static void deleteFad(Fad fad) {
+    public  void deleteFad(Fad fad) {
         Hylde hylde = fad.getHylde();
         if (hylde != null) {
             hylde.removeFad(fad);
         }
-        Storage.removeFad(fad);
+        storage.removeFad(fad);
     }
-    public static ArrayList<Fad> getFade() {
-        return Storage.getFade();
+    public ArrayList<Fad> getFade() {
+        return storage.getFade();
     }
     // -------------------------------------------------------------------------
     /**
      * Placerer et fad på en hylde og en plads
      */
-    public static void placerFad(Hylde hylde, int plads, Fad fad, LocalDate placeringsDato){
+    public void placerFad(Hylde hylde, int plads, Fad fad, LocalDate placeringsDato){
+        if (fad == null || placeringsDato == null  || hylde == null) {
+            throw new RuntimeException("Fadet, hylde og placeringsdato må ikke være null");
+        }
         if (plads > hylde.getAntalPladser() || plads < 1) {
             throw new RuntimeException("Pladsen findes ikke");
         }
@@ -110,7 +115,7 @@ public class Controller {
     /**
      * Fjerner et fad fra en hylde og en hyldeplads
      */
-    public static void removeFadFromLager(Fad fad){
+    public void removeFadFromLager(Fad fad){
      Hylde hylde = fad.getHylde();
      if (hylde.getFadeList().contains(fad)) {
          hylde.removeFad(fad);
@@ -119,10 +124,37 @@ public class Controller {
     /**
      * Fjerner et fad fra en hylde og en hyldeplads
      */
-    public static void flytFad (Fad fad, Hylde hylde, int Plads, LocalDate flytteDato){
+    public void flytFad (Fad fad, Hylde hylde, int Plads, LocalDate flytteDato){
         removeFadFromLager(fad);
         placerFad(hylde, Plads, fad, flytteDato);
     }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Opretter nyt destillat.<br />
+     * Requires:
+     */
+    public Destillat createDestillat(LocalDate startDato, LocalDate slutDato, int mængde, Medarbejder medarbejder, String kommentar, String vandType, MaltBatch maltBatch, String ID, int aloholProcent) {
+        Destillat destillat = new Destillat(startDato, slutDato, mængde, medarbejder, kommentar, vandType, maltBatch, ID, aloholProcent);
+        storage.addDestillat(destillat);
+        return destillat;
+    }
+    /**
+     * Get alle destillater
+     */
+    public ArrayList<Destillat> getDestillater() {
+        return storage.getDestillater();
+    }
+    // -------------------------------------------------------------------------
+    /**
+     * Opretter ny påfyldning på fra et destillat.<br />
+     * Requires: Et destillat og et fad.
+     */
+    public Påfyldning createPåfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
+        Påfyldning påfyldning = destillat.createPåflydning(mængde, fad, medarbejder, destillat, påfyldningsDato);
+        return påfyldning;
+    }
+
     // -------------------------------------------------------------------------
 
     // SAVE AND LOAD STORAGE HER
@@ -132,42 +164,28 @@ public class Controller {
     /**
      * Initializes the storage with some objects.
      */
-    public static void initStorage() {
-        Lager l1 = Controller.createLager("Bondegården", "Glæsborgvej 20, 8450 Hammel");
-        Lager l2 = Controller.createLager("Containeren", "Vesteragervej 1, 8450 Hammel");
+    public void initStorage() {
+        Lager l1 = controller.createLager("Bondegården", "Glæsborgvej 20, 8450 Hammel");
+        Lager l2 = controller.createLager("Containeren", "Vesteragervej 1, 8450 Hammel");
 
-        Hylde h1 = Controller.createHylde(1, l1, 10);
-        Hylde h2 = Controller.createHylde(2, l2,10);
+        Hylde h1 = controller.createHylde(1, l1, 10);
+        Hylde h2 = controller.createHylde(2, l2,10);
 
-        Hylde h3 = Controller.createHylde(1, l2, 5);
-        Hylde h4 = Controller.createHylde(2, l2, 5);
+        Hylde h3 = controller.createHylde(1, l2, 5);
+        Hylde h4 = controller.createHylde(2, l2, 5);
 
-        Fad f1 = Controller.createFad("001", "Bourbon", "250L", "Ingen");
-        Controller.placerFad(h1, 5, f1, LocalDate.of(2023, 3, 15));
+        Fad f1 = controller.createFad("001", "Bourbon", 250, null);
+        controller.placerFad(h1, 5, f1, LocalDate.of(2023, 3, 15));
+
+        Fad f2 = controller.createFad("002", "Rødvin", 150, "Ingen");
+        controller.placerFad(h2, 7, f2, LocalDate.of(2023, 3, 15));
+
 
     }
-        public static void init() {
+        public void init() {
             initStorage();
         }
-    public static void main(String[] args) {
-        Lager l1 = Controller.createLager("Bondegården", "Glæsborgvej 20, 8450 Hammel");
 
-        Hylde h1 = Controller.createHylde(1, l1, 10);
-        Hylde h2 = Controller.createHylde(2, l1,10);
-
-        System.out.println(h1.getAntalPladser());
-
-        Fad f1 = Controller.createFad("001", "Bourbon", "250L", "Ingen");
-        Fad f2 = Controller.createFad("002", "Bourbon", "250L", "Ingen");
-        Controller.placerFad(h1, 5, f1, LocalDate.of(2023, 3, 15));
-
-        Controller.placerFad(h1, 0, f2, LocalDate.of(2023, 3, 15));
-        System.out.println(f1.getFadPlacering());
-        System.out.println(f2.getFadPlacering());
-        System.out.println(f1.getHylde().getLager());
-        System.out.println(h1.getHyldePlads(f1));
-
-    }
     }
 
 

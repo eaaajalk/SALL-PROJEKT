@@ -6,7 +6,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 
 public class LagerPane extends GridPane {
-
     private ListView<Fad> lvwLagere;
 
     public LagerPane() {
@@ -14,6 +13,18 @@ public class LagerPane extends GridPane {
         this.setHgap(10);
         this.setVgap(10);
         this.setGridLinesVisible(false);
+        initContent();
+    }
+    private void initContent() {
 
     }
+
+    private void selectedLagerChanged() {
+        this.updateControls();
+    }
+
+    public void updateControls() {
+
+    }
+
 }

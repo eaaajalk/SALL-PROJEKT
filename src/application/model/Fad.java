@@ -6,16 +6,29 @@ import java.util.ArrayList;
 public class Fad {
     private String ID;
     private ArrayList<String> fadHistorik = new ArrayList<>();
-    private String str;
+    private int str;
     private String kommentar;
     private Hylde hylde;
     private LocalDate lagerDato;
+    private final ArrayList<Påfyldning> påfyldninger = new ArrayList<>();
 
-    public Fad(String ID, String fadHistorik, String str, String kommentar) {
+    public Fad(String ID, String fadHistorik, int str, String kommentar) {
         this.ID = ID;
         this.fadHistorik.add(fadHistorik);
         this.str = str;
         this.kommentar = kommentar;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public int getStr() {
+        return str;
+    }
+
+    public LocalDate getLagerDato() {
+        return lagerDato;
     }
 
     public void setHylde(Hylde hylde, int Plads) {
@@ -45,12 +58,26 @@ public class Fad {
         this.kommentar = kommentar;
     }
 
-    public String getFadPlacering () {
-        return "Hylde: " + getHylde().getHyldeNr() + " Plads: " + getHylde().getHyldePlads(this);
+    public ArrayList<String> getFadHistorik(){
+        return new ArrayList<>(fadHistorik);
+    }
+
+    public int getFadPlads () {
+        return getHylde().getHyldePlads(this);
+    }
+    public void addPåfyldning(Påfyldning påfyldning) {
+        if (!påfyldninger.contains(påfyldning)) {
+            påfyldninger.add(påfyldning);
+        }
+    }
+    public void removePåfyldning(Påfyldning påfyldning) {
+        if (påfyldninger.contains(påfyldning)) {
+            påfyldninger.remove(påfyldning);
+        }
     }
 
     @Override
     public String toString() {
-        return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getHylde().getHyldePlads(this);
+        return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getHylde().getHyldePlads(this)+ "                       " + getHylde().getLager().toString();
     }
 }
