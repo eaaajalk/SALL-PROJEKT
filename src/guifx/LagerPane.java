@@ -5,17 +5,12 @@ import application.model.Fad;
 import application.model.Hylde;
 import application.model.Lager;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import java.awt.*;
 
 public class LagerPane extends GridPane {
     private Controller controller;
@@ -65,12 +60,35 @@ public class LagerPane extends GridPane {
         txtFade.setMaxHeight(350);
 
         Button btnCreateLager = new Button("Opret Lager");
+        btnCreateLager.setOnAction(event -> this.createLagerAction());
         Button btnCreateHylde = new Button("Opret hylde");
+        btnCreateHylde.setOnAction(event -> this.createHyldeAction());
 
         this.add(btnCreateLager, 0, 4);
         this.add(btnCreateHylde, 2, 4);
 
 
+    }
+
+    private void createHyldeAction() {
+        lager = lvwLagere.getSelectionModel().getSelectedItem();
+        if (lager != null) {
+            OpretHyldeWindow dia = new OpretHyldeWindow("Opret lager", lager);
+            dia.showAndWait();
+            // Wait for the modal dialog to close
+            lvwHylder.getItems().setAll(lager.getHylder());
+            int index = lvwHylder.getItems().size() - 1;
+            lvwHylder.getSelectionModel().select(index);
+        }
+    }
+
+    private void createLagerAction() {
+        OpretLagerWindow dia = new OpretLagerWindow("Opret lager", lager);
+        dia.showAndWait();
+        // Wait for the modal dialog to close
+        lvwLagere.getItems().setAll(controller.getLagere());
+        int index = lvwLagere.getItems().size() - 1;
+        lvwLagere.getSelectionModel().select(index);
     }
 
     private void selectedLagerChanged() {

@@ -10,4 +10,16 @@ public class MaltBatch {
         this.batchNr = batchNr;
         this.tørv = tørv;
     }
+
+    public String getKornSort() {
+        return kornSort;
+    }
+
+    public String getBatchNr() {
+        return batchNr;
+    }
+
+    public String getTørv() {
+        return tørv;
+    }
 }
