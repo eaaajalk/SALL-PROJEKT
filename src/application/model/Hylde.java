@@ -61,7 +61,6 @@ public class Hylde {
         for (Map.Entry<Integer, Fad> entry : fade.entrySet()) {
             if (entry.getValue() == fad) {
                 key = entry.getKey();
-                break;
             }
         }
         return key;
@@ -70,6 +69,7 @@ public class Hylde {
         public int getAntalPladser() {
         return antalHyldePladser;
     }
+
 
     @Override
     public String toString(){

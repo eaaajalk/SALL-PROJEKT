@@ -53,6 +53,9 @@ public class Controller {
      * Requires: Et lager.
      */
     public Hylde createHylde(int hyldeNr, Lager lager, int antalHyldePladser) {
+        if (lager.getBrugteHyldeNumre().contains(hyldeNr)){
+            throw new RuntimeException("HyldeNr er allerede oprettet");
+        }
         Hylde hylde = lager.createHylde(hyldeNr, lager, antalHyldePladser);
         return hylde;
     }
@@ -70,6 +73,11 @@ public class Controller {
      * Opretter nyt Fad.<br />
      */
     public Fad createFad(String ID, String fadType, int str, String kommentar) {
+        for (int i = 0; i < storage.getFade().size(); i++) {
+            if (storage.getFade().get(i).getID().equalsIgnoreCase(ID)) {
+                throw new RuntimeException("Der er allerede oprettet et ID af samme navn");
+            }
+        }
         if (ID == null || fadType == null || str < 1) {
             throw new RuntimeException("ID, fadType og str må ikke være null");
         } else {
@@ -83,9 +91,8 @@ public class Controller {
      * Sletter fad.
      */
     public  void deleteFad(Fad fad) {
-        Hylde hylde = fad.getHylde();
-        if (hylde != null) {
-            hylde.removeFad(fad);
+        if (fad.getHylde() != null) {
+            fad.getHylde().removeFad(fad);
         }
         storage.removeFad(fad);
     }
@@ -169,16 +176,18 @@ public class Controller {
         Lager l2 = controller.createLager("Containeren", "Vesteragervej 1, 8450 Hammel");
 
         Hylde h1 = controller.createHylde(1, l1, 10);
+        Hylde h3 = controller.createHylde(1, l2, 5);
         Hylde h2 = controller.createHylde(2, l2,10);
 
-        Hylde h3 = controller.createHylde(1, l2, 5);
-        Hylde h4 = controller.createHylde(2, l2, 5);
+
+        Hylde h4 = controller.createHylde(3, l2, 5);
 
         Fad f1 = controller.createFad("001", "Bourbon", 250, null);
         controller.placerFad(h1, 5, f1, LocalDate.of(2023, 3, 15));
 
         Fad f2 = controller.createFad("002", "Rødvin", 150, "Ingen");
         controller.placerFad(h2, 7, f2, LocalDate.of(2023, 3, 15));
+        f1.addFadHistorik("Rødvin");
 
 
     }

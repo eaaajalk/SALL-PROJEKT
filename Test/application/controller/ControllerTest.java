@@ -115,6 +115,4 @@ class ControllerTest {
         });
         assertEquals(runtimeException.getMessage(), "Fadet, hylde og placeringsdato må ikke være null");
     }
-
-
 }

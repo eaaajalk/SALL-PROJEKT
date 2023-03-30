@@ -25,7 +25,6 @@ public class Destillat {
         this.maltBatch = maltBatch;
         this.ID = ID;
         this.alkoholProcent = alkoholProcent;
-
     }
 
     public ArrayList<Påfyldning> getPåfyldninger() {

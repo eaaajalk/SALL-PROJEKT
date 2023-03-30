@@ -10,11 +10,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class StartWindow extends Application {
-    private Controller controller;
 
     @Override
     public void init() {
-        controller = Controller.getController();
+        Controller controller = Controller.getController();
         controller.init();
     }
 
@@ -54,5 +53,12 @@ public class StartWindow extends Application {
         LagerPane lagerPane = new LagerPane();
         tabLager.setContent(lagerPane);
         tabLager.setOnSelectionChanged(event -> lagerPane.updateControls());
+
+        Tab tabDestillat = new Tab("Destillater");
+        tabPane.getTabs().add(tabDestillat);
+
+        DestillatPane destillatPane = new DestillatPane();
+        tabDestillat.setContent(destillatPane);
+        tabDestillat.setOnSelectionChanged(event -> destillatPane.updateControls());
     }
 }

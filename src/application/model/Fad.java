@@ -43,9 +43,10 @@ public class Fad {
         }
     }
 
-    public Hylde getHylde(){
+    public Hylde getHylde() {
         return hylde;
     }
+
     public void setLagerDato(LocalDate lagerDato) {
         this.lagerDato = lagerDato;
     }
@@ -58,26 +59,37 @@ public class Fad {
         this.kommentar = kommentar;
     }
 
-    public ArrayList<String> getFadHistorik(){
+    public ArrayList<String> getFadHistorik() {
         return new ArrayList<>(fadHistorik);
     }
 
-    public int getFadPlads () {
+    public void addFadHistorik(String fadHistorik) {
+        this.fadHistorik.add(fadHistorik);
+    }
+
+    public int getFadPlads() {
         return getHylde().getHyldePlads(this);
     }
+
     public void addPåfyldning(Påfyldning påfyldning) {
         if (!påfyldninger.contains(påfyldning)) {
             påfyldninger.add(påfyldning);
         }
     }
+
     public void removePåfyldning(Påfyldning påfyldning) {
         if (påfyldninger.contains(påfyldning)) {
             påfyldninger.remove(påfyldning);
         }
     }
 
-    @Override
+
     public String toString() {
-        return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getHylde().getHyldePlads(this)+ "                       " + getHylde().getLager().toString();
+        if (getHylde() == null) {
+            return ID + "                                             " + "Ikke placeret" + "                                         ";
+
+        } else {
+            return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getHylde().getHyldePlads(this) + "                            " + getHylde().getLager().toString();
+        }
     }
 }
