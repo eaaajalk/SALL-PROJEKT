@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
 
-    application.controller.Controller controller;
+    Controller controller;
     Lager l1;
     Lager l2;
     Hylde h1;

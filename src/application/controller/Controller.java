@@ -152,7 +152,6 @@ public class Controller {
     public ArrayList<Destillat> getDestillater() {
         return storage.getDestillater();
     }
-    // -------------------------------------------------------------------------
     /**
      * Opretter ny påfyldning på fra et destillat.<br />
      * Requires: Et destillat og et fad.
@@ -248,13 +247,13 @@ public class Controller {
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
         Destillat d2 = controller.createDestillat(LocalDate.of(2023, 1,20 ),
-                LocalDate.of(2023, 2, 21), 80, m2, null,
+                LocalDate.of(2023, 2, 21), 80, m2, "Ny varme på 80C",
                 "begravet dal under destilleriet", batch2,"002",32);
 
         Påfyldning p1 = controller.createPåfyldning(50, f1, m1, d1,
                 LocalDate.of(2023, 3, 12));
         Påfyldning p2 = controller.createPåfyldning(40, f2, m2, d2,
-                LocalDate.of(2023, 3, 12));
+                LocalDate.of(2023, 2, 21));
 
 
     }
