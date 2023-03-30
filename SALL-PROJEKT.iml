@@ -27,5 +27,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="junit" level="application" />
+    <orderEntry type="library" name="javafx" level="application" />
   </component>
 </module>
