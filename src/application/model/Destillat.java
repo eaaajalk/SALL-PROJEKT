@@ -63,4 +63,20 @@ public class Destillat {
     public int getAlkoholProcent() {
         return alkoholProcent;
     }
+
+    public LocalDate getStartDato() {
+        return startDato;
+    }
+
+    public int getMængde() {
+        return mængde;
+    }
+
+    public String getKommentar() {
+        return kommentar;
+    }
+
+    public String getVandType() {
+        return vandType;
+    }
 }

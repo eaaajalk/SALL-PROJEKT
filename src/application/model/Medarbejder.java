@@ -8,4 +8,17 @@ public class Medarbejder {
         this.navn = navn;
         this.ID = ID;
     }
+
+    public String getNavn() {
+        return navn;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    @Override
+    public String toString() {
+        return navn + " (" + ID + ")";
+    }
 }

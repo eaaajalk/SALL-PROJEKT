@@ -83,6 +83,9 @@ public class Fad {
         }
     }
 
+    public ArrayList<Påfyldning> getPåfyldninger() {
+        return new ArrayList<>(påfyldninger);
+    }
 
     public String toString() {
         if (getHylde() == null) {

@@ -71,7 +71,7 @@ public class FadPane extends GridPane {
 
         Separator separator = new Separator(Orientation.VERTICAL);
         separator.setMaxHeight(200);
-        separator.setPadding(new Insets(0,20,0,20));
+        separator.setPadding(new Insets(0,10,0,10));
         this.add(separator, 2, 4);
 
         Label lblID2 = new Label("ID:");
