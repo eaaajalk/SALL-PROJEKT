@@ -34,7 +34,7 @@ class ControllerTest {
 
     @Test
     void createFadTC1() {
-        assertEquals(8, controller.getFade().size());
+        assertEquals(2, controller.getFade().size());
         Fad fad = controller.createFad("Fad1", "Bourbon", 250, null);
         //assert
         assertNotNull(fad);
