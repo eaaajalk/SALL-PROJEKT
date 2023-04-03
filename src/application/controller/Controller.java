@@ -4,6 +4,8 @@ import application.model.*;
 import storage.Storage;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Controller {
     private static Controller controller;
@@ -153,16 +155,6 @@ public class Controller {
         return storage.getDestillater();
     }
     // -------------------------------------------------------------------------
-    /**
-     * Opretter ny påfyldning på fra et destillat.<br />
-     * Requires: Et destillat og et fad.
-     */
-    public Påfyldning createPåfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
-        Påfyldning påfyldning = destillat.createPåflydning(mængde, fad, medarbejder, destillat, påfyldningsDato);
-        return påfyldning;
-    }
-
-    // -------------------------------------------------------------------------
 
     /**
      * Opretter nyt medarbejder.<br />
@@ -213,6 +205,30 @@ public class Controller {
     }
 
     // -------------------------------------------------------------------------
+    /**
+     * Opretter ny Whisky.<br />
+     * Requires:
+     */
+    public WhiskyBatch createWhisky(String batch, int fortyndningsMængde, int alkoholProcent, int modningsTid, String beskrivelse, LocalDate produktionsDato, int fadMængde, Fad fad) {
+        WhiskyBatch whiskyBatch = new WhiskyBatch(batch, fortyndningsMængde, alkoholProcent, modningsTid, beskrivelse, produktionsDato, fadMængde, fad);
+        storage.addWhisky(whiskyBatch);
+        return whiskyBatch;
+    }
+    /**
+     * Sletter whisky<br />
+     */
+    public void deleteWhisky(WhiskyBatch whiskyBatch) {
+        storage.removeWhisky(whiskyBatch);
+    }
+
+    /**
+     * Get alle maltBatch
+     */
+    public  ArrayList<WhiskyBatch> getWhiskyBatches() {
+        return storage.getWhiskies();
+    }
+
+    // -------------------------------------------------------------------------
 
     // SAVE AND LOAD STORAGE HER
 
@@ -251,11 +267,15 @@ public class Controller {
                 LocalDate.of(2023, 2, 21), 80, m2, null,
                 "begravet dal under destilleriet", batch2,"002",32);
 
-        Påfyldning p1 = controller.createPåfyldning(50, f1, m1, d1,
+        Påfyldning p1 = d1.createPåfyldning(50, f1, m1, d1,
                 LocalDate.of(2023, 3, 12));
-        Påfyldning p2 = controller.createPåfyldning(40, f2, m2, d2,
+        Påfyldning p2 = d2.createPåfyldning(40, f2, m2, d2,
                 LocalDate.of(2023, 3, 12));
 
+        Omhældning o1 = f1.createOmhældning(20, (LocalDate.of(2023, 3,31)), f2);
+
+        WhiskyBatch w1 = controller.createWhisky("1", 10, 48, 4,
+                "Første release", LocalDate.of(2023, 3, 31), 50, f1);
 
     }
         public void init() {

@@ -7,6 +7,7 @@ public class Påfyldning {
     private Medarbejder medarbejder;
     private Destillat destillat;
     private LocalDate påfyldningsDato;
+    private Fad fad;
 
     public Påfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
         this.mængde = mængde;
@@ -14,6 +15,8 @@ public class Påfyldning {
         this.destillat = destillat;
         this.påfyldningsDato = påfyldningsDato;
         fad.addPåfyldning(this);
+        this.fad = fad;
+        this.fad.addIndholdsMængde(mængde);
     }
 
     public int getMængde() {
@@ -30,5 +33,9 @@ public class Påfyldning {
 
     public LocalDate getPåfyldningsDato() {
         return påfyldningsDato;
+    }
+
+    public Fad getFad() {
+        return fad;
     }
 }

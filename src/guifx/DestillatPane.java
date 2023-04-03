@@ -32,7 +32,7 @@ public class DestillatPane extends GridPane {
         Label lblID = new Label("     ID");
         Label lblFra = new Label("Fra");
         Label lblTil = new Label("Til");
-        Label lblMængde = new Label("Mængde");
+        Label lblMængde = new Label("Restmængde(L)");
 
         HBox hBox = new HBox(80);
         hBox.getChildren().add(lblID);
@@ -44,7 +44,7 @@ public class DestillatPane extends GridPane {
 
         lvwDestillater = new ListView<>();
         this.add(lvwDestillater, 0, 2, 2, 2);
-        lvwDestillater.setMaxWidth(350);
+        lvwDestillater.setMaxWidth(395);
         lvwDestillater.setMaxHeight(520);
         lvwDestillater.getItems().setAll(controller.getDestillater());
 
@@ -53,13 +53,13 @@ public class DestillatPane extends GridPane {
 
         Separator separator = new Separator(Orientation.VERTICAL);
         separator.setMaxHeight(200);
-        separator.setPadding(new Insets(0,10,0,10));
+        separator.setPadding(new Insets(0,20,0,20));
         this.add(separator, 1, 2);
 
         Label lblID1 = new Label("ID:");
         Label lblStartDato = new Label("Start dato:");
         Label lblSlutDato = new Label("Slut dato:");
-        Label lblMængde1 = new Label("Mængde:");
+        Label lblMængde1 = new Label("Mængde (L):");
         Label lblAlholProcent = new Label("Alkoholprocent");
         Label lblMaltBatch = new Label("MaltBatch:");
         Label lblKornSort = new Label("Kornsort:");
@@ -67,7 +67,7 @@ public class DestillatPane extends GridPane {
         Label lblVandtype = new Label("Vandtype:");
         Label lblMedarbejder = new Label("Medarbejder:");
         Label lblKommentar = new Label("Kommentar:");
-        Label lblTønder = new Label("Tønder:");
+        Label lblTønder = new Label("Lagret på:");
 
         VBox vBox = new VBox(25);
         vBox.getChildren().addAll(lblID1, lblStartDato, lblSlutDato,lblMængde1,lblAlholProcent,lblMaltBatch, lblKornSort, lblTørv, lblVandtype, lblMedarbejder, lblKommentar, lblTønder);
@@ -94,10 +94,10 @@ public class DestillatPane extends GridPane {
         vBox1.getChildren().addAll(txfID1, txfStartDato, txfSlutDato, txfMængde1, txfAlkoholProcent, txfMaltBatch, txfKornSort, txfTørv, txfVandtype, txfMedarbejder, txfKommentar, txaTønder);
         this.add(vBox1, 3, 2);
 
-        Button btnOpret = new Button("Opret Fad");
+        Button btnOpret = new Button("Opret Destillat");
         btnOpret.setOnAction(event -> this.createAction());
 
-        Button btnSlet = new Button("Slet Fad");
+        Button btnSlet = new Button("Slet Destillat");
         btnSlet.setOnAction(event -> this.sletAction());
 
         Button btnPåfyld = new Button("Hæld på fad");
@@ -109,18 +109,36 @@ public class DestillatPane extends GridPane {
     }
 
     private void påfyldAction() {
+        if (destillat != null) {
+            PåfyldWindow dia = new PåfyldWindow("Hæld på fad", destillat);
+            dia.showAndWait();
+
+            // Wait for the modal dialog to close
+            lvwDestillater.getItems().setAll(controller.getDestillater());
+            int index = lvwDestillater.getItems().size() - 1;
+            lvwDestillater.getSelectionModel().select(index);
+        }
     }
 
     private void sletAction() {
     }
 
     private void createAction() {
+        OpretDestillatWindow dia = new OpretDestillatWindow("Opret destillat", destillat);
+        dia.showAndWait();
+        // Wait for the modal dialog to close
+        lvwDestillater.getItems().setAll(controller.getDestillater());
+        int index = lvwDestillater.getItems().size() - 1;
+        lvwDestillater.getSelectionModel().select(index);
+
+
     }
 
     private void selectedDestillatChanged() {
         this.updateControls();
     }
     public void updateControls() {
+
         destillat = lvwDestillater.getSelectionModel().getSelectedItem();
         if (destillat != null) {
             txfID1.setText(destillat.getID());
@@ -137,11 +155,7 @@ public class DestillatPane extends GridPane {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < destillat.getPåfyldninger().size(); i++) {
                 Påfyldning påfyldning = destillat.getPåfyldninger().get(i);
-                for (int j = 0; j < controller.getFade().size(); j++) {
-                    if (controller.getFade().get(i).getPåfyldninger().equals(påfyldning)) {
-                        sb.append("Fad ID: ").append(controller.getFade().get(i).getID()).append(" Destillat mængde: ").append(påfyldning.getMængde()).append(("\r\n"));
-                    }
-                }
+                sb.append("D. ").append(påfyldning.getPåfyldningsDato()).append(" er der flydt ").append(påfyldning.getMængde()).append("L på fadID: ").append(påfyldning.getFad().getID()).append("\n");
             }
             txaTønder.setText(sb.toString());
         } else {

@@ -10,7 +10,11 @@ public class Fad {
     private String kommentar;
     private Hylde hylde;
     private LocalDate lagerDato;
+
+    private int indholdsMængde;
     private final ArrayList<Påfyldning> påfyldninger = new ArrayList<>();
+    private final ArrayList<Omhældning> omhældninger = new ArrayList<>();
+
 
     public Fad(String ID, String fadHistorik, int str, String kommentar) {
         this.ID = ID;
@@ -87,12 +91,44 @@ public class Fad {
         return new ArrayList<>(påfyldninger);
     }
 
+    public int getResterendePlads(){
+        return getStr() - getIndholdsMængde();
+    }
+
+    public void addIndholdsMængde(int indholdsMængde) {
+        this.indholdsMængde += indholdsMængde;
+    }
+    public void setIndholdsMængde(int indholdsMængde) {
+        this.indholdsMængde = indholdsMængde;
+    }
+
+    public int getIndholdsMængde() {
+        return indholdsMængde;
+    }
+
+
+    public Omhældning createOmhældning (int mængde, LocalDate omhældningsDato, Fad tilFad){
+        Omhældning omhældning = new Omhældning(this, mængde, omhældningsDato, tilFad);
+        tilFad.addOmhældning(omhældning);
+        return omhældning;
+    }
+    public void addOmhældning(Omhældning omhældning) {
+        if (!omhældninger.contains(omhældning)) {
+            omhældninger.add(omhældning);
+        }
+    }
+
+    public String getIndholdMængdeToString(){
+        return "" + getIndholdsMængde() + "/" + str + "L";
+    }
+
+
     public String toString() {
         if (getHylde() == null) {
-            return ID + "                                             " + "Ikke placeret" + "                                         ";
+            return ID + "                    " + getIndholdMængdeToString() + "                                     " + "Ikke placeret" + "                                         ";
 
         } else {
-            return ID + "                                " + getHylde().getHyldeNr() + "                                       " + getHylde().getHyldePlads(this) + "                            " + getHylde().getLager().toString();
+            return ID +"                  " + getIndholdMængdeToString() + "                        " + getHylde().getHyldeNr() + "                            " + getHylde().getHyldePlads(this) + "              " + getHylde().getLager().toString();
         }
     }
 }

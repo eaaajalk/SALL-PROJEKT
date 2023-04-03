@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Destillat {
     private LocalDate startDato;
     private LocalDate slutDato;
-    private int mængde;
+    private int mængde, restMængde;
     private Medarbejder medarbejder;
     private int alkoholProcent = 0;
     private String kommentar;
@@ -25,14 +25,16 @@ public class Destillat {
         this.maltBatch = maltBatch;
         this.ID = ID;
         this.alkoholProcent = alkoholProcent;
+        this.restMængde = mængde;
     }
 
     public ArrayList<Påfyldning> getPåfyldninger() {
         return new ArrayList<>(påfyldninger);
     }
-    public Påfyldning createPåflydning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
+    public Påfyldning createPåfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
         Påfyldning påfyldning = new Påfyldning(mængde, fad, medarbejder, destillat, påfyldningsDato);
         påfyldninger.add(påfyldning);
+        setRestMængde(getRestMængde()-mængde);
         return påfyldning;
     }
     public void addPåfyldning(Påfyldning påfyldning) {
@@ -78,5 +80,18 @@ public class Destillat {
 
     public String getVandType() {
         return vandType;
+    }
+
+    public void setRestMængde(int mængde) {
+        this.restMængde = mængde;
+    }
+
+    public int getRestMængde() {
+        return restMængde;
+    }
+
+    @Override
+    public String toString() {
+        return ID + "                  " + startDato + "            " + slutDato + "                             " + restMængde;
     }
 }

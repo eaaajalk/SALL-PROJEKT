@@ -92,6 +92,8 @@ public class LagerPane extends GridPane {
     }
 
     private void selectedLagerChanged() {
+        lvwHylder.getSelectionModel().clearSelection();
+        txtFade.clear();
         lager = lvwLagere.getSelectionModel().getSelectedItem();
         if (lager != null) {
             lvwHylder.getItems().setAll(lager.getHylder());

@@ -19,6 +19,6 @@ public class Medarbejder {
 
     @Override
     public String toString() {
-        return navn + " (" + ID + ")";
+        return navn + " (ID: " + ID + ")";
     }
 }

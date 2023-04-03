@@ -54,7 +54,7 @@ public class OpretFadWindow extends Stage {
         pane.setGridLinesVisible(false);
 
         Label lblID2 = new Label("ID:");
-        Label lblStr = new Label("Str:");
+        Label lblStr = new Label("Str (L):");
         Label lblKommentar = new Label("Kommentar:");
         Label lblHistorik = new Label("Fad historik:     ");
 

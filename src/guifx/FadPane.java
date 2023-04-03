@@ -1,11 +1,13 @@
 package guifx;
 
 import application.controller.Controller;
+import application.model.Destillat;
 import application.model.Fad;
+import application.model.Omhældning;
+import application.model.Påfyldning;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -15,8 +17,8 @@ import java.util.Optional;
 
 public class FadPane extends GridPane {
     private ListView<Fad> lvwFade;
-    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato;
-    private TextArea txfFadHistorik;
+    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, fadHistorik;
+    private TextArea txaDestillater;
     private Fad fad;
 
     private ComboBox<Object> comboBox;
@@ -51,13 +53,15 @@ public class FadPane extends GridPane {
         Label lblHylde = new Label("Hylde");
         Label lblPlads = new Label("Plads");
         Label lblLager = new Label("Lager");
+        Label lblIndhold = new Label("Indhold(L)");
 
-        HBox hBox = new HBox(80);
+
+        HBox hBox = new HBox(50);
         hBox.getChildren().add(lblID);
+        hBox.getChildren().add(lblIndhold);
         hBox.getChildren().add(lblHylde);
         hBox.getChildren().add(lblPlads);
         hBox.getChildren().add(lblLager);
-
         this.add(hBox, 0, 3);
 
         lvwFade = new ListView<>();
@@ -75,15 +79,16 @@ public class FadPane extends GridPane {
         this.add(separator, 2, 4);
 
         Label lblID2 = new Label("ID:");
-        Label lblStr = new Label("Str:");
+        Label lblStr = new Label("Str (L):");
         Label lblLager2 = new Label("Lager:");
         Label lblHylde2 = new Label("Hylde:");
         Label lblDato = new Label("Lagerdato:");
         Label lblKommentar = new Label("Kommentar:");
         Label lblHistorik = new Label("Fad historik:      ");
+        Label lblDestillat = new Label("Indhold:");
 
         VBox vBox = new VBox(25);
-        vBox.getChildren().addAll(lblID2, lblStr, lblLager2,lblHylde2,lblDato,lblKommentar,lblHistorik);
+        vBox.getChildren().addAll(lblID2, lblStr, lblLager2,lblHylde2,lblDato,lblKommentar,lblHistorik, lblDestillat);
         this.add(vBox, 3, 4);
 
         txfID = new TextField();
@@ -92,12 +97,13 @@ public class FadPane extends GridPane {
         txfHylde = new TextField();
         txfLagerDato = new TextField();
         txfKommentar = new TextField();
-        txfFadHistorik = new TextArea();
-        txfFadHistorik.setMaxWidth(350);
-        txfFadHistorik.setMaxHeight(100);
+        fadHistorik = new TextField();
+        txaDestillater = new TextArea();
+        txaDestillater.setMaxWidth(350);
+        txaDestillater.setMaxHeight(100);
 
         VBox vBox1 = new VBox(15);
-        vBox1.getChildren().addAll(txfID,txfStr,txfLager,txfHylde,txfLagerDato,txfKommentar,txfFadHistorik);
+        vBox1.getChildren().addAll(txfID,txfStr,txfLager,txfHylde,txfLagerDato,txfKommentar, fadHistorik, txaDestillater);
         this.add(vBox1, 4, 4);
 
 
@@ -110,9 +116,23 @@ public class FadPane extends GridPane {
         Button btnPlacer = new Button("Placer/Flyt Fad");
         btnPlacer.setOnAction(event -> this.placerAction());
 
-        HBox hBoxBtn = new HBox(80);
-        hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnPlacer);
+        Button btnOmhæld = new Button("Omhæld Fad");
+        btnOmhæld.setOnAction(event -> this.omhældAction());
+
+        HBox hBoxBtn = new HBox(50);
+        hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnPlacer, btnOmhæld);
         this.add(hBoxBtn, 0, 8);
+
+    }
+
+    private void omhældAction() {
+        if (fad != null) {
+            OmhældningsWindow dia = new OmhældningsWindow("Omhæld Fad", fad);
+            dia.showAndWait();
+
+            // Wait for the modal dialog to close
+            lvwFade.getItems().setAll(controller.getFade());
+        }
 
     }
 
@@ -187,10 +207,18 @@ public class FadPane extends GridPane {
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < fad.getFadHistorik().size(); i++) {
-
-                sb.append(fad.getFadHistorik().get(i)).append("\r\n");
+                sb.append(fad.getFadHistorik().get(i)).append("   |   ");
             }
-            txfFadHistorik.setText(sb.toString());
+            fadHistorik.setText(sb.toString());
+
+            StringBuilder sb1 = new StringBuilder();
+            for (int i = 0; i < fad.getPåfyldninger().size(); i++) {
+                Påfyldning påfyldning = fad.getPåfyldninger().get(i);
+                sb1.append("Den ").append(påfyldning.getPåfyldningsDato()).append(" er påfyldt ").append(påfyldning.getMængde()).append("L destillatID: ").append(påfyldning.getDestillat().getID()).append("");
+            }
+            txaDestillater.setText(sb1.toString());
+
+
         } else {
             txfID.clear();
             txfStr.clear();
@@ -198,7 +226,8 @@ public class FadPane extends GridPane {
             txfHylde.clear();
             txfKommentar.clear();
             txfLagerDato.clear();
-            txfFadHistorik.clear();
+            fadHistorik.clear();
+            txaDestillater.clear();
         }
 
     }
