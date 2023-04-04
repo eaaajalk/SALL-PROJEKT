@@ -129,12 +129,12 @@ public class PlacerFadWindow extends Stage {
         LocalDate dato = datePicker.getValue();
 
         if (!placeret) {
-            if (lager != null & hylde != null && dato != null && plads > 0) {
-                controller.placerFad(hylde, plads, fad, dato);
+            if (lager != null & hylde != null && plads > 0) {
+                controller.placerFad(hylde, plads, fad);
             }
         } else {
-            if (lager != null & hylde != null && dato != null && plads > 0) {
-                controller.flytFad(fad, hylde, plads, dato);
+            if (lager != null & hylde != null && plads > 0) {
+                controller.flytFad(fad, hylde, plads);
             }
         }
 

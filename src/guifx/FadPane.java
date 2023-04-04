@@ -50,24 +50,22 @@ public class FadPane extends GridPane {
         comboBox.setOnAction(event -> this.sortAction());
 
         Label lblID = new Label("     ID");
-        Label lblHylde = new Label("Hylde");
-        Label lblPlads = new Label("Plads");
-        Label lblLager = new Label("Lager");
+        Label lblHylde = new Label("        Lager");
         Label lblIndhold = new Label("Indhold(L)");
+        Label lblModning = new Label("Modningstid (År)");
 
 
         HBox hBox = new HBox(50);
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblIndhold);
+        hBox.getChildren().add(lblModning);
         hBox.getChildren().add(lblHylde);
-        hBox.getChildren().add(lblPlads);
-        hBox.getChildren().add(lblLager);
         this.add(hBox, 0, 3);
 
         lvwFade = new ListView<>();
         this.add(lvwFade, 0, 4, 2, 4);
-        lvwFade.setPrefWidth(400);
-        lvwFade.setMaxHeight(350);
+        lvwFade.setPrefWidth(450);
+        lvwFade.setMaxHeight(450);
         lvwFade.getItems().setAll(controller.getFade());
 
         ChangeListener<Fad> listener = (ov, oldFad, newFad) -> this.selectedFadChanged();
@@ -82,7 +80,7 @@ public class FadPane extends GridPane {
         Label lblStr = new Label("Str (L):");
         Label lblLager2 = new Label("Lager:");
         Label lblHylde2 = new Label("Hylde:");
-        Label lblDato = new Label("Lagerdato:");
+        Label lblDato = new Label("Lagrings Dato:");
         Label lblKommentar = new Label("Kommentar:");
         Label lblHistorik = new Label("Fad historik:      ");
         Label lblDestillat = new Label("Indhold:");
@@ -137,6 +135,7 @@ public class FadPane extends GridPane {
     }
 
     private void sletAction() {
+
         fad = lvwFade.getSelectionModel().getSelectedItem();
         if (fad != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -202,7 +201,7 @@ public class FadPane extends GridPane {
             if (fad.getHylde() != null) {
                 txfLager.setText(String.valueOf(fad.getHylde().getLager()));
                 txfHylde.setText(fad.getHylde().toString());
-                txfLagerDato.setText(String.valueOf(fad.getLagerDato()));
+                txfLagerDato.setText(String.valueOf(fad.getLagringsDato()));
             }
 
             StringBuilder sb = new StringBuilder();

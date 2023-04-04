@@ -14,7 +14,6 @@ public class Omhældning {
         this.tilFad = tilFad;
         updateMængder();
         updatePåfyldninger();
-
     }
 
     private void updatePåfyldninger() {

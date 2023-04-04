@@ -100,7 +100,7 @@ public class Storage {
         return new ArrayList<WhiskyBatch>(whiskies);
     }
 
-    public void addWhisky(WhiskyBatch whiskyBatch) {
+    public void addWhiskyBatch(WhiskyBatch whiskyBatch) {
         whiskies.add(whiskyBatch);
     }
 
