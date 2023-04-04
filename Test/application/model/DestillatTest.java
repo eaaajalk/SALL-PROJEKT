@@ -22,16 +22,7 @@ class DestillatTest {
 
     @BeforeEach
     void setUp() {
-        if (f1.getID() == 001) {
-
-        } else {
-            if (f1 == null) {
-
-            f1 = controller.createFad("Borbon", 250, "Privat fad");
-            }
-        }
-
-
+        f1 = controller.createFad("Borbon", 250, "Privat fad");
     }
 
     // ----------------------------------------------------------------------------------
