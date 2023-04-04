@@ -14,7 +14,7 @@ public class WhiskyBatch {
     private int modningsTid;
     private String beskrivelse;
     private LocalDate batchDato;
-    private ArrayList<Produkt> flasker = new ArrayList<Produkt>();
+    private ArrayList<Produkt> produkter = new ArrayList<Produkt>();
     private int batchMængde;
     private LocalDate lagringsDato;
 
@@ -31,7 +31,7 @@ public class WhiskyBatch {
 
     public Produkt createFlaske(int nr, int pris, LocalDate tapningsDato) {
         Produkt produkt = new Produkt(nr, this, pris, tapningsDato);
-        flasker.add(produkt);
+        produkter.add(produkt);
         return produkt;
     }
 
@@ -39,6 +39,10 @@ public class WhiskyBatch {
         for (int i = 1; i < antalFlasker; i++) {
             createFlaske(i, pris, tapningsDato);
         }
+    }
+
+    public int beregnAntalFlasker(int batchMængde, double flaskeStr) {
+        return (int) (batchMængde / flaskeStr);
     }
 
     public void updateModningsTid() {
@@ -74,8 +78,8 @@ public class WhiskyBatch {
         return beskrivelse;
     }
 
-    public ArrayList<Produkt> getFlasker() {
-        return flasker;
+    public ArrayList<Produkt> getProdukter() {
+        return produkter;
     }
 
     public int getBatchMængde() {
@@ -118,6 +122,30 @@ public class WhiskyBatch {
 
     public LocalDate getLagringsDato() {
       return this.lagringsDato;
+    }
+
+    public StringBuilder getHistorie() {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sb1 = new StringBuilder();
+        String overskrift = "Whisky Batch:";
+        String id = "ID: " + getBatchID();
+        String modning = "Modningstid: " + getModningstid();
+        String date = "Lavet den: " + getBatchDato();
+        String alkohol = "Alkoholprocent: " + getAlkoholProcent();
+        String fortynding = "Fortyndings mængde: " + getFortyndningsMængde();
+        String beskrivelse = "Kommentar: " + getBeskrivelse();
+        String fade = "WhiskyBatch " + getBatchID() + " er lavet af følgende fad(e):";
+        ArrayList<Fad> keySet = new ArrayList<>(getFade().keySet());
+        for (int i = 0; i < getFade().size(); i++) {
+            sb.append("FadID: ").append(keySet.get(i).getID()).append(" | Mængde: ").append(getFade().get(keySet.get(i))).append("\n");
+        }
+
+        sb1.append(overskrift).append("\n").append(id).append("\n").append(modning).append("\n").append(date).append("\n")
+                .append(alkohol).append("\n").append(fortynding).append("\n").append(beskrivelse).append("\n").append(fade).append("\n").append(sb);
+
+        return sb1;
+
+
     }
 
     @Override

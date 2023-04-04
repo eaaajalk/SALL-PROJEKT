@@ -3,7 +3,6 @@ package guifx;
 import application.controller.Controller;
 import application.model.Fad;
 import application.model.Produkt;
-import application.model.Påfyldning;
 import application.model.WhiskyBatch;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
@@ -11,6 +10,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -23,6 +23,7 @@ public class WhiskyPane extends GridPane {
     private ListView<Produkt> lvwProdukter;
     private WhiskyBatch whiskyBatch;
     private ComboBox<Object> comboBox;
+    private Produkt produkt;
 
     private Controller controller;
 
@@ -89,6 +90,12 @@ public class WhiskyPane extends GridPane {
         lvwProdukter.setPrefWidth(300);
         lvwProdukter.setMaxHeight(350);
 
+        ChangeListener<Produkt> listener1 = (ov, oldProdukt, newProdukt) -> this.selectedProduktChanged();
+        lvwProdukter.getSelectionModel().selectedItemProperty().addListener(listener1);
+
+        Button btnHistorie = new Button("Se Historie");
+        this.add(btnHistorie, 6, 5);
+        btnHistorie.setOnAction(event -> this.historieAction());
 
 
         Button btnOpret = new Button("Opret Batch");
@@ -98,7 +105,7 @@ public class WhiskyPane extends GridPane {
         btnSlet.setOnAction(event -> this.sletAction());
 
         Button btnTapning = new Button("Tap på flasker");
-        btnTapning.setOnAction(event -> this.placerAction());
+        btnTapning.setOnAction(event -> this.tapAction());
 
         HBox hBoxBtn = new HBox(25);
         hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnTapning);
@@ -106,34 +113,68 @@ public class WhiskyPane extends GridPane {
 
     }
 
+    private void historieAction() {
+        if (produkt != null) {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Whisky Historie");
+
+            Label label = new Label("The exception stacktrace was:");
+
+            TextArea textArea = new TextArea();
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+
+            textArea.setMaxWidth(Double.MAX_VALUE);
+            textArea.setMaxHeight(Double.MAX_VALUE);
+            GridPane.setVgrow(textArea, Priority.ALWAYS);
+            GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+            GridPane expContent = new GridPane();
+            expContent.setMaxWidth(Double.MAX_VALUE);
+            expContent.add(label, 0, 0);
+            expContent.add(textArea, 0, 1);
+
+
+            ButtonType buttonTypeOne = new ButtonType("One");
+            ButtonType buttonTypeTwo = new ButtonType("Two");
+            ButtonType buttonTypeThree = new ButtonType("Three");
+            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeCancel);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOne){
+                // ... user chose "One"
+            } else if (result.get() == buttonTypeTwo) {
+                // ... user chose "Two"
+            } else if (result.get() == buttonTypeThree) {
+                // ... user chose "Three"
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        }
+    }
+
+    private void selectedProduktChanged() {
+        produkt = lvwProdukter.getSelectionModel().getSelectedItem();
+    }
+
 
     private void sletAction() {
-        whiskyBatch = lvwBatches.getSelectionModel().getSelectedItem();
-        if (whiskyBatch != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Slet fad");
-            // alert.setContentText("Are you sure?");
-            alert.setHeaderText("Er du sikker på at slette fad med ID: " + whiskyBatch.getBatchID() + " og fjerne det fra lageret?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-
-                lvwBatches.getItems().setAll(controller.getWhiskyBatches());
-                this.updateControls();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Slet fad");
-            alert.setHeaderText("Du kan ikke slette et fad der er på lageret");
-            // wait for the modal dialog to close
-            alert.show();
-
-        }
 
     }
 
-    private void placerAction() {
+    private void tapAction() {
+        if (whiskyBatch != null) {
+            TapFlaskerWindow dia = new TapFlaskerWindow("Tap Flasker", whiskyBatch);
+            dia.showAndWait();
+            // Wait for the modal dialog to close
+            lvwBatches.getItems().setAll(controller.getWhiskyBatches());
+            int index = lvwBatches.getItems().size() - 1;
+            lvwBatches.getSelectionModel().select(index);
 
-
+            lvwProdukter.getItems().setAll(whiskyBatch.getProdukter());
+        }
     }
 
     private void createAction() {
@@ -151,13 +192,7 @@ public class WhiskyPane extends GridPane {
     // -------------------------------------------------------------------------
 
     private void selectedBatchChanged() {
-        this.updateControls();
-    }
-
-    public void updateControls() {
-
         whiskyBatch = lvwBatches.getSelectionModel().getSelectedItem();
-
         if (whiskyBatch != null) {
             txfID.setText(whiskyBatch.getBatchID());
             txfFortynding.setText(String.valueOf(whiskyBatch.getFortyndningsMængde()));
@@ -168,12 +203,13 @@ public class WhiskyPane extends GridPane {
 
             StringBuilder sb1 = new StringBuilder();
             ArrayList<Fad> fade = new ArrayList<>(whiskyBatch.getFade().keySet());
-            for (int i = 0; i < fade.size(); i++) {
-               Fad fad = fade.get(i);
-               int mængde = whiskyBatch.getFade().get(fad);
-               sb1.append("FadID: ").append(fad.getID()).append(" | Mængde tilføjet: ").append(mængde).append("L").append("\n");
+            for (Fad fad : fade) {
+                int mængde = whiskyBatch.getFade().get(fad);
+                sb1.append("FadID: ").append(fad.getID()).append(" | Mængde tilføjet: ").append(mængde).append("L").append("\n");
             }
             txfFade.setText(String.valueOf(sb1));
+
+            selectedProduktChanged();
 
         } else {
             txfID.clear();
@@ -185,6 +221,11 @@ public class WhiskyPane extends GridPane {
             txfFade.clear();
             lvwProdukter.getSelectionModel().clearSelection();
         }
+
+    }
+
+    public void updateControls() {
+
 
     }
 
