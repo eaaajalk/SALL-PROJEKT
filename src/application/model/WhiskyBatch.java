@@ -1,6 +1,7 @@
 package application.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,18 +13,20 @@ public class WhiskyBatch {
     private Map<Fad, Integer> fade = new HashMap<>();
     private int modningsTid;
     private String beskrivelse;
-    private LocalDate produktionsDato;
+    private LocalDate batchDato;
     private ArrayList<Produkt> flasker = new ArrayList<Produkt>();
-    private int mængde;
+    private int batchMængde;
+    private LocalDate lagringsDato;
 
-    public WhiskyBatch(String batchID, int fortyndningsMængde, int alkoholProcent, int modningsTid, String beskrivelse, LocalDate produktionsDato, int fadMængde, Fad fad) {
+    public WhiskyBatch(String batchID, int fortyndningsMængde, int alkoholProcent, String beskrivelse, LocalDate batchDato, int fadMængde, Fad fad) {
         this.batchID = batchID;
         this.fortyndningsMængde = fortyndningsMængde;
         this.alkoholProcent = alkoholProcent;
-        this.modningsTid = modningsTid;
         this.beskrivelse = beskrivelse;
-        this.produktionsDato = produktionsDato;
-
+        this.batchDato = batchDato;
+        this.batchMængde = fortyndningsMængde;
+        this.lagringsDato = null;
+        addFad(fad, fadMængde);
     }
 
     public Produkt createFlaske(int nr, int pris, LocalDate tapningsDato) {
@@ -36,6 +39,19 @@ public class WhiskyBatch {
         for (int i = 1; i < antalFlasker; i++) {
             createFlaske(i, pris, tapningsDato);
         }
+    }
+
+    public void updateModningsTid() {
+        long diff = ChronoUnit.YEARS.between(getLagringsDato(), batchDato);
+        this.modningsTid = (int) diff;
+    }
+
+    public int getModningstid() {
+       return modningsTid;
+    }
+
+    public LocalDate getBatchDato() {
+        return batchDato;
     }
 
     public String getBatchID() {
@@ -54,23 +70,22 @@ public class WhiskyBatch {
         return new HashMap<>(fade);
     }
 
-    public int getModningsTid() {
-        return modningsTid;
-    }
-
     public String getBeskrivelse() {
         return beskrivelse;
-    }
-
-    public LocalDate getProduktionsDato() {
-        return produktionsDato;
     }
 
     public ArrayList<Produkt> getFlasker() {
         return flasker;
     }
+
+    public int getBatchMængde() {
+        return batchMængde;
+    }
+
     public void addFad(Fad fad, int mængde) {
         if (fad.getIndholdsMængde() >= mængde) {
+            updateMængde(mængde);
+            setLagringsDato(fad.getLagringsDato());
             if (!fade.containsKey(fad)) {
                 fade.put(fad, mængde);
                 fad.setIndholdsMængde(fad.getIndholdsMængde()-mængde);
@@ -84,6 +99,26 @@ public class WhiskyBatch {
         }
     }
 
+    private void updateMængde(int mængde) {
+        this.batchMængde += mængde;
+
+    }
+
+    public void setLagringsDato(LocalDate lagringsDato) {
+        if (this.lagringsDato == null) {
+            this.lagringsDato = lagringsDato;
+        } else {
+            if (lagringsDato.isAfter(getLagringsDato())){
+                this.lagringsDato = lagringsDato;
+            }
+        }
+        updateModningsTid();
+
+    }
+
+    public LocalDate getLagringsDato() {
+      return this.lagringsDato;
+    }
 
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package application.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class Fad {
@@ -9,11 +10,12 @@ public class Fad {
     private int str;
     private String kommentar;
     private Hylde hylde;
-    private LocalDate lagerDato;
-
     private int indholdsMængde;
     private final ArrayList<Påfyldning> påfyldninger = new ArrayList<>();
     private final ArrayList<Omhældning> omhældninger = new ArrayList<>();
+    private LocalDate lagringsDato;
+
+    private double modningsTid;
 
 
     public Fad(String ID, String fadHistorik, int str, String kommentar) {
@@ -21,6 +23,7 @@ public class Fad {
         this.fadHistorik.add(fadHistorik);
         this.str = str;
         this.kommentar = kommentar;
+        this.lagringsDato = null;
     }
 
     public String getID() {
@@ -31,9 +34,6 @@ public class Fad {
         return str;
     }
 
-    public LocalDate getLagerDato() {
-        return lagerDato;
-    }
 
     public void setHylde(Hylde hylde, int Plads) {
         if (this.hylde != hylde) {
@@ -51,9 +51,6 @@ public class Fad {
         return hylde;
     }
 
-    public void setLagerDato(LocalDate lagerDato) {
-        this.lagerDato = lagerDato;
-    }
 
     public String getKommentar() {
         return kommentar;
@@ -78,6 +75,7 @@ public class Fad {
     public void addPåfyldning(Påfyldning påfyldning) {
         if (!påfyldninger.contains(påfyldning)) {
             påfyldninger.add(påfyldning);
+            updateLagringsDato(påfyldning.getPåfyldningsDato());
         }
     }
 
@@ -105,8 +103,6 @@ public class Fad {
     public int getIndholdsMængde() {
         return indholdsMængde;
     }
-
-
     public Omhældning createOmhældning (int mængde, LocalDate omhældningsDato, Fad tilFad){
         Omhældning omhældning = new Omhældning(this, mængde, omhældningsDato, tilFad);
         tilFad.addOmhældning(omhældning);
@@ -115,6 +111,7 @@ public class Fad {
     public void addOmhældning(Omhældning omhældning) {
         if (!omhældninger.contains(omhældning)) {
             omhældninger.add(omhældning);
+            updateLagringsDato(omhældning.getFraFad().lagringsDato);
         }
     }
 
@@ -122,13 +119,39 @@ public class Fad {
         return "" + getIndholdsMængde() + "/" + str + "L";
     }
 
+    public void updateLagringsDato(LocalDate lagringsDato) {
+        if (getLagringsDato() == null) {
+            this.lagringsDato = lagringsDato;
+        } else if (lagringsDato.isAfter(getLagringsDato())) {
+            this.lagringsDato = lagringsDato;
+        }
+        updateModningsTid();
+    }
+
+    public LocalDate getLagringsDato() {
+        return lagringsDato;
+    }
+
+    public void updateModningsTid() {
+        long diff = ChronoUnit.YEARS.between(getLagringsDato(), LocalDate.now());
+        this.modningsTid = (double) diff;
+    }
+
+    public double getModningsTid() {
+        return modningsTid;
+    }
 
     public String toString() {
         if (getHylde() == null) {
             return ID + "                    " + getIndholdMængdeToString() + "                                     " + "Ikke placeret" + "                                         ";
 
         } else {
-            return ID +"                  " + getIndholdMængdeToString() + "                        " + getHylde().getHyldeNr() + "                            " + getHylde().getHyldePlads(this) + "              " + getHylde().getLager().toString();
+            return ID +"                  " + getIndholdMængdeToString() +"                              " + getModningsTid()+  "                             " +
+                    "     " + getHylde().getLager().toString() + " (H" + getHylde().getHyldeNr() + ", P" + getFadPlads() + ")" ;
         }
+    }
+
+    public String toString2() {
+        return ID + "    " + modningsTid;
     }
 }

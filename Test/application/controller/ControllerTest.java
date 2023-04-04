@@ -77,12 +77,12 @@ class ControllerTest {
 
     @Test
     void placerFadTC1() {
-        controller.placerFad(h1, 1, f1, LocalDate.of(2023, 3, 15));
+        controller.placerFad(h1, 1, f1);
         assertTrue(h1.getFadeList().contains(f1));
     }
     @Test
     void placerFadTC2() {
-        controller.placerFad(h2, 3, f2, LocalDate.of(2023, 3, 15));
+        controller.placerFad(h2, 3, f2);
         assertTrue(h2.getFadeList().contains(f2));
 
         double actualResult = f2.getFadPlads();
@@ -92,26 +92,26 @@ class ControllerTest {
     @Test
     void placerFadTC3() {
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
-        controller.placerFad(h1, 3, null, LocalDate.of(2023, 3, 15));
+        controller.placerFad(h1, 3, null);
         });
         assertEquals(runtimeException.getMessage(), "Fadet, hylde og placeringsdato må ikke være null");
     }
     void placerFadTC6() {
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
-            controller.placerFad(h1, 3, f1, null);
+            controller.placerFad(h1, 3, f1);
         });
         assertEquals(runtimeException.getMessage(), "Fadet, hylde og placeringsdato må ikke være null");
     }
     void placerFadTC5() {
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
-            controller.placerFad(h1, -1, f1, LocalDate.of(2023, 3, 15));
+            controller.placerFad(h1, -1, f1);
         });
         assertEquals(runtimeException.getMessage(), "Pladsen findes ikke");
     }
 
     void placerFadTC4() {
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
-            controller.placerFad(null, 3, f1, LocalDate.of(2023, 3, 15));
+            controller.placerFad(null, 3, f1);
         });
         assertEquals(runtimeException.getMessage(), "Fadet, hylde og placeringsdato må ikke være null");
     }

@@ -61,16 +61,14 @@ public class OmhældningsWindow extends Stage {
         pane.add(lblVælg, 0, 0);
 
         Label lblID = new Label("     ID");
-        Label lblHylde = new Label("Hylde");
-        Label lblPlads = new Label("Plads");
-        Label lblLager = new Label("Lager");
+        Label lblLager = new Label("   Lager");
+        Label lblmodning = new Label("Modningstid (År)");
         Label lblIndhold = new Label("Indhold(L)");
 
         HBox hBox = new HBox(50);
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblIndhold);
-        hBox.getChildren().add(lblHylde);
-        hBox.getChildren().add(lblPlads);
+        hBox.getChildren().add(lblmodning);
         hBox.getChildren().add(lblLager);
         pane.add(hBox, 0, 1);
 
@@ -79,6 +77,7 @@ public class OmhældningsWindow extends Stage {
         lvwFade.setPrefWidth(400);
         lvwFade.setMaxHeight(350);
         lvwFade.getItems().setAll(controller.getFade());
+        lvwFade.getItems().remove(fraFad);
 
 
 

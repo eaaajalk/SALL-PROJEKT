@@ -58,26 +58,22 @@ public class PåfyldWindow extends Stage {
 
         Label lblComp = new Label("Vælg fad");
         pane.add(lblComp, 0, 0);
-
         Label lblID = new Label("     ID");
-        Label lblHylde = new Label("Hylde");
-        Label lblPlads = new Label("Plads");
-        Label lblLager = new Label("Lager");
+        Label lblHylde = new Label("        Lager");
         Label lblIndhold = new Label("Indhold(L)");
+        Label lblModning = new Label("Modningstid (År)");
+
 
         HBox hBox = new HBox(50);
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblIndhold);
+        hBox.getChildren().add(lblModning);
         hBox.getChildren().add(lblHylde);
-        hBox.getChildren().add(lblPlads);
-        hBox.getChildren().add(lblLager);
         pane.add(hBox, 0, 1);
-
-
 
         lvwFade = new ListView<>();
         pane.add(lvwFade, 0, 2);
-        lvwFade.setPrefWidth(400);
+        lvwFade.setPrefWidth(450);
         lvwFade.setMaxHeight(350);
         lvwFade.getItems().setAll(controller.getFade());
 

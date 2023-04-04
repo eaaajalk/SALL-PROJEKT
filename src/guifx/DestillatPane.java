@@ -45,7 +45,7 @@ public class DestillatPane extends GridPane {
         lvwDestillater = new ListView<>();
         this.add(lvwDestillater, 0, 2, 2, 2);
         lvwDestillater.setMaxWidth(395);
-        lvwDestillater.setMaxHeight(520);
+        lvwDestillater.setMaxHeight(550);
         lvwDestillater.getItems().setAll(controller.getDestillater());
 
         ChangeListener<Destillat> listener = (ov, oldDestillat, newDestillat) -> this.selectedDestillatChanged();

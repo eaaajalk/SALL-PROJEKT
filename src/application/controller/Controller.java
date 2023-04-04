@@ -4,8 +4,6 @@ import application.model.*;
 import storage.Storage;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Controller {
     private static Controller controller;
@@ -106,8 +104,8 @@ public class Controller {
     /**
      * Placerer et fad på en hylde og en plads
      */
-    public void placerFad(Hylde hylde, int plads, Fad fad, LocalDate placeringsDato){
-        if (fad == null || placeringsDato == null  || hylde == null) {
+    public void placerFad(Hylde hylde, int plads, Fad fad){
+        if (fad == null || hylde == null) {
             throw new RuntimeException("Fadet, hylde og placeringsdato må ikke være null");
         }
         if (plads > hylde.getAntalPladser() || plads < 1) {
@@ -120,7 +118,6 @@ public class Controller {
             throw new RuntimeException("Der står allerede et fad på pladsen");
         }
         fad.setHylde(hylde, plads);
-        fad.setLagerDato(placeringsDato);
     }
     /**
      * Fjerner et fad fra en hylde og en hyldeplads
@@ -134,9 +131,9 @@ public class Controller {
     /**
      * Fjerner et fad fra en hylde og en hyldeplads
      */
-    public void flytFad (Fad fad, Hylde hylde, int Plads, LocalDate flytteDato){
+    public void flytFad (Fad fad, Hylde hylde, int Plads){
         removeFadFromLager(fad);
-        placerFad(hylde, Plads, fad, flytteDato);
+        placerFad(hylde, Plads, fad);
     }
 
     // -------------------------------------------------------------------------
@@ -210,9 +207,9 @@ public class Controller {
      * Opretter ny Whisky.<br />
      * Requires:
      */
-    public WhiskyBatch createWhisky(String batch, int fortyndningsMængde, int alkoholProcent, int modningsTid, String beskrivelse, LocalDate produktionsDato, int fadMængde, Fad fad) {
-        WhiskyBatch whiskyBatch = new WhiskyBatch(batch, fortyndningsMængde, alkoholProcent, modningsTid, beskrivelse, produktionsDato, fadMængde, fad);
-        storage.addWhisky(whiskyBatch);
+    public WhiskyBatch createWhiskyBatch(String batchID, int fortyndningsMængde, int alkoholProcent, String beskrivelse, LocalDate batchDato, int fadMængde, Fad fad) {
+        WhiskyBatch whiskyBatch = new WhiskyBatch(batchID, fortyndningsMængde, alkoholProcent, beskrivelse, batchDato, fadMængde, fad);
+        storage.addWhiskyBatch(whiskyBatch);
         return whiskyBatch;
     }
     /**
@@ -249,11 +246,11 @@ public class Controller {
         Hylde h4 = controller.createHylde(3, l2, 5);
 
         Fad f1 = controller.createFad("001", "Bourbon", 250, null);
-        controller.placerFad(h1, 5, f1, LocalDate.of(2023, 3, 15));
+        controller.placerFad(h1, 5, f1);
         f1.addFadHistorik("Rødvin");
 
         Fad f2 = controller.createFad("002", "Rødvin", 150, "Ingen");
-        controller.placerFad(h2, 7, f2, LocalDate.of(2023, 3, 15));
+        controller.placerFad(h2, 7, f2);
 
         Medarbejder m1 = controller.createMedarbejder("Oscar", "123");
         Medarbejder m2 = controller.createMedarbejder("Johan", "333");
@@ -275,8 +272,8 @@ public class Controller {
 
         Omhældning o1 = f1.createOmhældning(20, (LocalDate.of(2023, 3,31)), f2);
 
-        WhiskyBatch w1 = controller.createWhisky("1", 10, 48, 4,
-                "Første release", LocalDate.of(2023, 3, 31), 50, f1);
+        WhiskyBatch w1 = controller.createWhiskyBatch("1", 10, 48,
+                "Første release", LocalDate.of(2026, 5, 31), 50, f2);
 
     }
         public void init() {

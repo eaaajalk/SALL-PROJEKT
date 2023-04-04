@@ -2,6 +2,7 @@ package guifx;
 
 import application.controller.Controller;
 import application.model.Fad;
+import application.model.Produkt;
 import application.model.Påfyldning;
 import application.model.WhiskyBatch;
 import javafx.beans.value.ChangeListener;
@@ -12,12 +13,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class WhiskyPane extends GridPane {
     private ListView<WhiskyBatch> lvwBatches;
-    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, fadHistorik;
-    private TextArea txaDestillater;
+    private TextField txfID, txfFortynding, txfModning, txfBatchDato, txfBeskrivelse, txfBatchMængde;
+    private TextArea txfFade;
+    private ListView<Produkt> lvwProdukter;
     private WhiskyBatch whiskyBatch;
     private ComboBox<Object> comboBox;
 
@@ -33,9 +36,11 @@ public class WhiskyPane extends GridPane {
     }
 
     private void initContent() {
+        Label lblOverskift = new Label("Whisky Batches:");
+        this.add(lblOverskift, 0, 0);
         lvwBatches = new ListView<>();
         this.add(lvwBatches, 0, 1, 2, 4);
-        lvwBatches.setPrefWidth(400);
+        lvwBatches.setMaxWidth(300);
         lvwBatches.setMaxHeight(350);
         lvwBatches.getItems().setAll(controller.getWhiskyBatches());
 
@@ -44,50 +49,60 @@ public class WhiskyPane extends GridPane {
 
         Separator separator = new Separator(Orientation.VERTICAL);
         separator.setMaxHeight(200);
-        separator.setPadding(new Insets(0,10,0,10));
+        separator.setPadding(new Insets(0,20,0,20));
         this.add(separator, 2, 4);
 
         Label lblID2 = new Label("ID:");
-        Label lblStr = new Label("Str (L):");
-        Label lblLager2 = new Label("Lager:");
-        Label lblHylde2 = new Label("Hylde:");
-        Label lblDato = new Label("Lagerdato:");
-        Label lblKommentar = new Label("Kommentar:");
-        Label lblHistorik = new Label("Fad historik:      ");
-        Label lblDestillat = new Label("Indhold:");
+        Label lblFortynding = new Label("Fortyndingsmængde(L):");
+        Label lblModning = new Label("Modningstid:");
+        Label lblBatchDato = new Label("Batch dato:");
+        Label lblBatchMængde = new Label("BatchMængde:");
+        Label lblBeskrivelse = new Label("Beskrivelse:");
+        Label lblFade = new Label("Fra fad(e):");
 
         VBox vBox = new VBox(25);
-        vBox.getChildren().addAll(lblID2, lblStr, lblLager2,lblHylde2,lblDato,lblKommentar,lblHistorik, lblDestillat);
+        vBox.getChildren().addAll(lblID2, lblFortynding, lblModning,lblBatchDato,lblBatchMængde, lblBeskrivelse,lblFade);
         this.add(vBox, 3, 4);
 
         txfID = new TextField();
-        txfStr = new TextField();
-        txfLager = new TextField();
-        txfHylde = new TextField();
-        txfLagerDato = new TextField();
-        txfKommentar = new TextField();
-        fadHistorik = new TextField();
-        txaDestillater = new TextArea();
-        txaDestillater.setMaxWidth(350);
-        txaDestillater.setMaxHeight(100);
+        txfFortynding = new TextField();
+        txfModning = new TextField();
+        txfBatchDato = new TextField();
+        txfBatchMængde = new TextField();
+        txfBeskrivelse = new TextField();
+        txfFade = new TextArea();
+        txfFade.setMaxWidth(350);
+        txfFade.setMaxHeight(100);
+
 
         VBox vBox1 = new VBox(15);
-        vBox1.getChildren().addAll(txfID,txfStr,txfLager,txfHylde,txfLagerDato,txfKommentar, fadHistorik, txaDestillater);
+        vBox1.getChildren().addAll(txfID, txfFortynding, txfModning, txfBatchDato, txfBatchMængde, txfBeskrivelse, txfFade);
         this.add(vBox1, 4, 4);
 
+        Separator separator1 = new Separator(Orientation.VERTICAL);
+        separator1.setMaxHeight(200);
+        separator1.setPadding(new Insets(0,20,0,20));
+        this.add(separator1, 5, 4);
 
-        Button btnOpret = new Button("Opret Fad");
+        lvwProdukter = new ListView<>();
+        this.add(lvwProdukter, 6, 4);
+        lvwProdukter.setPrefWidth(300);
+        lvwProdukter.setMaxHeight(350);
+
+
+
+        Button btnOpret = new Button("Opret Batch");
         btnOpret.setOnAction(event -> this.createAction());
 
-        Button btnSlet = new Button("Slet Fad");
+        Button btnSlet = new Button("Slet Batch");
         btnSlet.setOnAction(event -> this.sletAction());
 
         Button btnTapning = new Button("Tap på flasker");
         btnTapning.setOnAction(event -> this.placerAction());
 
-        HBox hBoxBtn = new HBox(50);
+        HBox hBoxBtn = new HBox(25);
         hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnTapning);
-        this.add(hBoxBtn, 0, 8);
+        this.add(hBoxBtn, 0, 5);
 
     }
 
@@ -122,7 +137,7 @@ public class WhiskyPane extends GridPane {
     }
 
     private void createAction() {
-        OpretFadWindow dia = new OpretFadWindow("Opret Batch");
+        OpretWhiskyBatchWindow dia = new OpretWhiskyBatchWindow("Opret Batch", whiskyBatch);
         dia.showAndWait();
         // Wait for the modal dialog to close
         lvwBatches.getItems().setAll(controller.getWhiskyBatches());
@@ -140,21 +155,35 @@ public class WhiskyPane extends GridPane {
     }
 
     public void updateControls() {
+
         whiskyBatch = lvwBatches.getSelectionModel().getSelectedItem();
+
         if (whiskyBatch != null) {
             txfID.setText(whiskyBatch.getBatchID());
+            txfFortynding.setText(String.valueOf(whiskyBatch.getFortyndningsMængde()));
+            txfModning.setText(String.valueOf(whiskyBatch.getModningstid()));
+            txfBatchDato.setText(String.valueOf(whiskyBatch.getBatchDato()));
+            txfBeskrivelse.setText(whiskyBatch.getBeskrivelse());
+            txfBatchMængde.setText(String.valueOf(whiskyBatch.getBatchMængde()));
 
-
+            StringBuilder sb1 = new StringBuilder();
+            ArrayList<Fad> fade = new ArrayList<>(whiskyBatch.getFade().keySet());
+            for (int i = 0; i < fade.size(); i++) {
+               Fad fad = fade.get(i);
+               int mængde = whiskyBatch.getFade().get(fad);
+               sb1.append("FadID: ").append(fad.getID()).append(" | Mængde tilføjet: ").append(mængde).append("L").append("\n");
+            }
+            txfFade.setText(String.valueOf(sb1));
 
         } else {
             txfID.clear();
-            txfStr.clear();
-            txfLager.clear();
-            txfHylde.clear();
-            txfKommentar.clear();
-            txfLagerDato.clear();
-            fadHistorik.clear();
-            txaDestillater.clear();
+            txfFortynding.clear();
+            txfModning.clear();
+            txfBatchDato.clear();
+            txfBeskrivelse.clear();
+            txfBatchMængde.clear();
+            txfFade.clear();
+            lvwProdukter.getSelectionModel().clearSelection();
         }
 
     }
