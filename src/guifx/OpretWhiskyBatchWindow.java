@@ -16,13 +16,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class OpretWhiskyBatchWindow  extends Stage {
     private WhiskyBatch whiskyBatch;
     private Fad fad;
-    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, txfFadHistorik;
     Controller controller;
+
     public OpretWhiskyBatchWindow(String title, WhiskyBatch whiskyBatch) {
         controller = Controller.getController();
 
@@ -46,12 +47,14 @@ public class OpretWhiskyBatchWindow  extends Stage {
 
     // -------------------------------------------------------------------------
 
-    private TextField txfName, txfHours;
+    private TextField txfID2, txfFortynding, txfAlkohol, txfBeskrivelse;
+    private DatePicker datePicker;
     private Label lblError;
     private ListView<Fad> lvwFade;
 
     private TextArea txaValgteFade;
     private Map<Fad, Integer> fadeMap = new HashMap<>();
+
     private void initContent(GridPane pane) {
         pane.setPadding(new Insets(10));
         pane.setHgap(10);
@@ -77,7 +80,7 @@ public class OpretWhiskyBatchWindow  extends Stage {
         lvwFade = new ListView<>();
         pane.add(lvwFade, 0, 2);
         lvwFade.setPrefWidth(450);
-        lvwFade.setMaxHeight(350);
+        lvwFade.setMaxHeight(200);
         lvwFade.getItems().setAll(controller.getFade());
 
 
@@ -94,40 +97,105 @@ public class OpretWhiskyBatchWindow  extends Stage {
 
         txaValgteFade = new TextArea();
         pane.add(txaValgteFade, 0, 5);
+        txaValgteFade.setMaxHeight(100);
 
+        Label lblID1 = new Label("ID:");
+        txfID2 = new TextField();
+        pane.add(lblID1, 0, 6);
+        pane.add(txfID2, 0, 7);
+        txfID2.setMaxWidth(155);
+
+
+        Label lblFortynding = new Label("Fortyndingsmængde(L):        ");
+        txfFortynding = new TextField();
+        pane.add(lblFortynding, 0, 6);
+        pane.add(txfFortynding, 0, 7);
+        txfFortynding.setMaxWidth(155);
+        GridPane.setHalignment(lblFortynding, HPos.CENTER);
+        GridPane.setHalignment(txfFortynding, HPos.CENTER);
+
+
+        Label lblAlkohol = new Label("Alkoholprocent:                         ");
+        txfAlkohol = new TextField();
+        pane.add(lblAlkohol, 0, 6);
+        pane.add(txfAlkohol, 0, 7);
+        GridPane.setHalignment(lblAlkohol, HPos.RIGHT);
+        GridPane.setHalignment(txfAlkohol, HPos.RIGHT);
+        txfAlkohol.setMaxWidth(155);
+
+        Label lblDato = new Label("Oprettelses dato:");
+        datePicker = new DatePicker();
+        pane.add(lblDato, 0, 8);
+        pane.add(datePicker, 0, 9);
+
+        Label lblBeskrivelse = new Label("Beskrivelse:");
+        txfBeskrivelse = new TextField();
+        pane.add(lblBeskrivelse, 0, 10);
+        pane.add(txfBeskrivelse, 0, 11);
+
+        Button btnCancel = new Button("Cancel");
+        pane.add(btnCancel, 0, 12);
+        GridPane.setHalignment(btnCancel, HPos.LEFT);
+        btnCancel.setOnAction(event -> this.cancelAction());
+
+        Button btnOK = new Button("Opret");
+        pane.add(btnOK, 0, 12);
+        GridPane.setHalignment(btnOK, HPos.RIGHT);
+        btnOK.setOnAction(event -> this.okAction());
+
+        lblError = new Label();
+        pane.add(lblError, 0, 13);
+        lblError.setStyle("-fx-text-fill: red");
 
         this.initControls();
     }
 
     private void tilføjAction() {
-        TextInputDialog popup = new TextInputDialog();
-        popup.setTitle("Tilføj fad");
-        // alert.setContentText("Are you sure?");
-        popup.setHeaderText("Du er ved at tilføje fad " + fad.getID());
-        Optional<String> result = popup.showAndWait();
-        if (result.isPresent()) {
-            int mængde = Integer.parseInt(result.get().trim());
-            if (result.get().trim().length() > 0) {
-                if (mængde <= fad.getIndholdsMængde()) {
-                    fadeMap.put(fad, mængde);
-                    selectedFadChanged();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Tilføj fad");
-                    alert.setHeaderText("Du kan ikke tilføje mere end fadets indhold!");
-                    // wait for the modal dialog to close
-                    alert.show();
-                }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (fad != null ) {
+            if (fad.getModningsTid() < 3) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Tilføj fad");
-                alert.setHeaderText("Indtast mængde for at tilføje fadet!");
-                // wait for the modal dialog to close
-                alert.show();
+                alert.setHeaderText("Du er ved at tilføje et fad der har modnet i mindre end 3 år");
+                alert.setContentText("Er du sikker på at du vil fortsætte?");
+                Optional<ButtonType> result1 = alert.showAndWait();
+                if ((result1.isPresent()) && (result1.get() == ButtonType.OK)) {
+                    TextInputDialog popup = new TextInputDialog();
+                    popup.setTitle("Tilføj fad");
+                    // alert.setContentText("Are you sure?");
+                    popup.setHeaderText("Du er ved at tilføje fad " + fad.getID());
+                    popup.setContentText("Indast mængde: ");
+                    Optional<String> result = popup.showAndWait();
+
+                    if (result.isPresent()) {
+                        int mængde = Integer.parseInt(result.get().trim());
+                        if (result.get().trim().length() < 1) {
+                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                            alert2.setTitle("Tilføj fad");
+                            alert2.setHeaderText("Indtast mængde for at tilføje fadet!");
+                            // wait for the modal dialog to close
+                            alert2.show();
+                        } else {
+                            if (mængde > fad.getIndholdsMængde()) {
+                                Alert alert3 = new Alert(Alert.AlertType.INFORMATION);
+                                alert3.setTitle("Tilføj fad");
+                                alert3.setHeaderText("Du kan ikke tilføje mere end fadets indhold!");
+                                // wait for the modal dialog to close
+                                alert3.show();
+                            } else {
+                                fadeMap.put(fad, mængde);
+                                selectedFadChanged();
+                            }
+                        }
+                    }
+                } else {
+                    alert.hide();
+                }
             }
         }
-
     }
+
+
+
 
     private void selectedFadChanged() {
         ArrayList<Fad> keys = new ArrayList<>(fadeMap.keySet());
@@ -138,6 +206,38 @@ public class OpretWhiskyBatchWindow  extends Stage {
     }
 
     private void okAction() {
+        String id = txfID2.getText().trim();
+        if (id.length() == 0) {
+            lblError.setText("ID er ikke udfyld");
+        }
+        int fortynding = Integer.parseInt(txfFortynding.getText().trim());
+        if (txfFortynding.getText().trim().length() == 0) {
+            lblError.setText("Indtast fortyndingsmængde");
+        }
+        int alkoholprocent = Integer.parseInt(txfAlkohol.getText().trim());
+        if (alkoholprocent < 1) {
+            lblError.setText("Indtast alkoholprocent");
+        }
+
+        LocalDate dato = datePicker.getValue();
+        if (dato == null) {
+            lblError.setText("Vælg en dato");
+        }
+        String beskrivelse = txfBeskrivelse.getText().trim();
+
+        ArrayList<Fad> keys = new ArrayList<>(fadeMap.keySet());
+
+        if ( keys.size() == 0) {
+            lblError.setText("Vælg fad(e)");
+        } else {
+            WhiskyBatch whiskyBatch1 = controller.createWhiskyBatch(id, fortynding, alkoholprocent, beskrivelse, dato, fadeMap.get(keys.get(0)), keys.get(0));
+            if (keys.size() > 1) {
+                for (int i = 1; i < keys.size(); i++) {
+                    whiskyBatch1.addFad(keys.get(i), fadeMap.get(keys.get(i)));
+                }
+            }
+        }
+        this.hide();
 
     }
 
