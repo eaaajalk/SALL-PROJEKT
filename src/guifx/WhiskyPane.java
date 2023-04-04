@@ -12,7 +12,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -118,42 +122,43 @@ public class WhiskyPane extends GridPane {
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Whisky Historie");
 
-            Label label = new Label("The exception stacktrace was:");
-
-            TextArea textArea = new TextArea();
-            textArea.setEditable(false);
-            textArea.setWrapText(true);
-
-            textArea.setMaxWidth(Double.MAX_VALUE);
-            textArea.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setVgrow(textArea, Priority.ALWAYS);
-            GridPane.setHgrow(textArea, Priority.ALWAYS);
 
             GridPane expContent = new GridPane();
             expContent.setMaxWidth(Double.MAX_VALUE);
-            expContent.add(label, 0, 0);
-            expContent.add(textArea, 0, 1);
+
+            Label lblFlaskeInfo = new Label("Flaske information:");
+            lblFlaskeInfo.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 17));
+            expContent.add(lblFlaskeInfo, 0, 0);
+
+            Label lblflaske = new Label(produkt.produktHistorie());
+            lblflaske.setFont(Font.font("Helvetica", FontWeight.MEDIUM, 15));
+            expContent.add(lblflaske, 0, 1);
+
+            Separator separator = new Separator(Orientation.HORIZONTAL);
+            expContent.add(separator, 0, 2);
+
+            Label lblWhiskyBatch = new Label("Batch information:");
+            lblWhiskyBatch.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 17));
+            expContent.add(lblWhiskyBatch, 0, 3);
+
+            Label lblbatch = new Label(produkt.getWhiskyBatch().getHistorie());
+            lblbatch.setFont(Font.font("Helvetica", FontWeight.MEDIUM, 15));
+            expContent.add(lblbatch, 0, 4);
 
 
-            ButtonType buttonTypeOne = new ButtonType("One");
-            ButtonType buttonTypeTwo = new ButtonType("Two");
-            ButtonType buttonTypeThree = new ButtonType("Three");
-            ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeCancel);
+            alert.getDialogPane().setContent(expContent);
+            alert.getDialogPane().setPrefSize(800, 600); // Angiver en bredde og højde på Alert-boksen
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == buttonTypeOne){
-                // ... user chose "One"
-            } else if (result.get() == buttonTypeTwo) {
-                // ... user chose "Two"
-            } else if (result.get() == buttonTypeThree) {
-                // ... user chose "Three"
-            } else {
-                // ... user chose CANCEL or closed the dialog
-            }
+            ButtonType lukButtonType = ButtonType.CLOSE; // Tilføjer en "Luk"-knap
+            alert.getDialogPane().getButtonTypes().add(lukButtonType);
+            Button lukButton = (Button) alert.getDialogPane().lookupButton(lukButtonType);
+            lukButton.setText("Luk"); // Ændrer knapteksten til "Luk"
+
+            alert.showAndWait();
         }
     }
+
 
     private void selectedProduktChanged() {
         produkt = lvwProdukter.getSelectionModel().getSelectedItem();
@@ -208,6 +213,7 @@ public class WhiskyPane extends GridPane {
                 sb1.append("FadID: ").append(fad.getID()).append(" | Mængde tilføjet: ").append(mængde).append("L").append("\n");
             }
             txfFade.setText(String.valueOf(sb1));
+            lvwProdukter.getItems().setAll(whiskyBatch.getProdukter());
 
             selectedProduktChanged();
 

@@ -124,26 +124,26 @@ public class WhiskyBatch {
       return this.lagringsDato;
     }
 
-    public StringBuilder getHistorie() {
+    public String getHistorie() {
         StringBuilder sb = new StringBuilder();
         StringBuilder sb1 = new StringBuilder();
-        String overskrift = "Whisky Batch:";
+
         String id = "ID: " + getBatchID();
-        String modning = "Modningstid: " + getModningstid();
+        String modning = "Modningstid: " + getModningstid() + " år";
         String date = "Lavet den: " + getBatchDato();
-        String alkohol = "Alkoholprocent: " + getAlkoholProcent();
-        String fortynding = "Fortyndings mængde: " + getFortyndningsMængde();
+        String fortynding = "Fortyndingsmængde: " + getFortyndningsMængde();
         String beskrivelse = "Kommentar: " + getBeskrivelse();
-        String fade = "WhiskyBatch " + getBatchID() + " er lavet af følgende fad(e):";
+        String fade = "WhiskyBatch ID: " + getBatchID() + " er lavet af følgende fad(e):";
         ArrayList<Fad> keySet = new ArrayList<>(getFade().keySet());
         for (int i = 0; i < getFade().size(); i++) {
             sb.append("FadID: ").append(keySet.get(i).getID()).append(" | Mængde: ").append(getFade().get(keySet.get(i))).append("\n");
         }
 
-        sb1.append(overskrift).append("\n").append(id).append("\n").append(modning).append("\n").append(date).append("\n")
-                .append(alkohol).append("\n").append(fortynding).append("\n").append(beskrivelse).append("\n").append(fade).append("\n").append(sb);
 
-        return sb1;
+        sb1.append("\n").append(id).append("\n").append(modning).append("\n").append(date).append("\n")
+                .append("\n").append(fortynding).append("\n").append(beskrivelse).append("\n").append(fade).append("\n").append(sb);
+
+        return String.valueOf(sb1);
 
 
     }
