@@ -63,6 +63,9 @@ public class OpretFadWindow extends Stage {
         pane.add(vBox, 0, 0);
 
         txfID = new TextField();
+        txfID.setText(Fad.getCountID());
+//        txfID.setEditable(false);
+        txfID.setDisable(true);
         txfStr = new TextField();
         txfKommentar = new TextField();
         txfFadHistorik = new TextField();
@@ -89,9 +92,9 @@ public class OpretFadWindow extends Stage {
     }
 
     private void okAction() {
-        String id = txfID.getText().trim();
-        if (id.length() == 0) {
-            lblError.setText("ID er ikke udfyld");
+        int id = Integer.parseInt(txfID.getCharacters().toString());
+        if (id <= 0) {
+            lblError.setText("ID skal være over 0");
         }
         int str = Integer.parseInt(txfStr.getText().trim());
         if (str < 1) {
@@ -103,7 +106,8 @@ public class OpretFadWindow extends Stage {
         String fadType = txfFadHistorik.getText().trim();
 
         // Call controller methods
-        controller.createFad(id, fadType, str, kommetnar);
+        controller.createFad(fadType, str, kommetnar).setID(id);
+
 
 
         this.hide();

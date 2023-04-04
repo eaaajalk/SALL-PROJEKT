@@ -5,7 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class Fad {
-    private String ID;
+    private int ID;
     private ArrayList<String> fadHistorik = new ArrayList<>();
     private int str;
     private String kommentar;
@@ -16,10 +16,12 @@ public class Fad {
     private LocalDate lagringsDato;
 
     private double modningsTid;
+    private static int countID = 1;
 
 
-    public Fad(String ID, String fadHistorik, int str, String kommentar) {
-        this.ID = ID;
+    public Fad(String fadHistorik, int str, String kommentar) {
+        this.ID = countID;
+        countID++;
         this.fadHistorik.add(fadHistorik);
         this.str = str;
         this.kommentar = kommentar;
@@ -27,7 +29,13 @@ public class Fad {
     }
 
     public String getID() {
-        return ID;
+        String tempID = "" + ID;
+        if (ID < 10) {
+            tempID = "00" + ID;
+        } else if (ID < 100) {
+            tempID = "0" + ID;
+        }
+        return tempID;
     }
 
     public int getStr() {
@@ -141,17 +149,31 @@ public class Fad {
         return modningsTid;
     }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public static String getCountID() {
+        String tempID = "" + countID;
+        if (countID < 10) {
+        tempID = "00" + countID;
+        } else if (countID < 100) {
+            tempID = "0" + countID;
+        }
+        return tempID;
+    }
+
     public String toString() {
         if (getHylde() == null) {
-            return ID + "                    " + getIndholdMængdeToString() + "                                     " + "Ikke placeret" + "                                         ";
+            return getID() + "                    " + getIndholdMængdeToString() + "                                     " + "Ikke placeret" + "                                         ";
 
         } else {
-            return ID +"                  " + getIndholdMængdeToString() +"                              " + getModningsTid()+  "                             " +
+            return getID() +"                  " + getIndholdMængdeToString() +"                              " + getModningsTid()+  "                             " +
                     "     " + getHylde().getLager().toString() + " (H" + getHylde().getHyldeNr() + ", P" + getFadPlads() + ")" ;
         }
     }
 
     public String toString2() {
-        return ID + "    " + modningsTid;
+        return getID() + "    " + modningsTid;
     }
 }

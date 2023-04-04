@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class DestillatTest {
     Destillat destillat;
     Controller controller = Controller.getTestController();
-    Fad f1 = controller.createFad("001", "Borbon", 250, "Privat fad");
-    Fad f2 = controller.createFad("002", "Borbon", 250, "Privat fad");
+    Fad f1;
+//    Fad f2 = controller.createFad("002", "Borbon", 250, "Privat fad");
     Medarbejder m1 = controller.createMedarbejder("Oscar", "123");
     Medarbejder m2 = controller.createMedarbejder("Johan", "333");
     MaltBatch batch1 = controller.createMaltBatch("Evergreen", "001", "muld");
@@ -22,6 +22,14 @@ class DestillatTest {
 
     @BeforeEach
     void setUp() {
+        if (f1.getID() == 001) {
+
+        } else {
+            if (f1 == null) {
+
+            f1 = controller.createFad("Borbon", 250, "Privat fad");
+            }
+        }
 
 
     }
@@ -101,6 +109,9 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
+
+
         påfyldning = destillat.createPåfyldning(10,f1,m1,destillat,
                 LocalDate.of(2023, 3, 12));
 
@@ -115,6 +126,8 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
+
         påfyldning = destillat.createPåfyldning(50, f1, m1,
                 destillat, LocalDate.of(2023, 3, 12));
         assertNotNull(påfyldning);
@@ -126,6 +139,8 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
+
         påfyldning = destillat.createPåfyldning(40, f1, m2,
                 destillat, LocalDate.of(2023, 3, 21));
         assertNotNull(påfyldning);
@@ -139,6 +154,7 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             påfyldning = destillat.createPåfyldning(-10, f1, m1,
@@ -152,6 +168,7 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             påfyldning = destillat.createPåfyldning(2000, f1, m1,
@@ -165,6 +182,7 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             påfyldning = destillat.createPåfyldning(40, f1, m1,
@@ -180,6 +198,7 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
 
         påfyldning = destillat.createPåfyldning(50, f1, m1,
                 destillat, LocalDate.of(2023, 3, 12));
@@ -196,6 +215,8 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
+
         påfyldning = destillat.createPåfyldning(40, f1, m2,
                 destillat, LocalDate.of(2023, 3, 21));
 
@@ -212,6 +233,8 @@ class DestillatTest {
         destillat = controller.createDestillat(LocalDate.of(2023, 1,27 ),
                 LocalDate.of(2023, 3, 12), 150, m1, null,
                 "begravet dal under destilleriet", batch1,"001",32);
+        
+
         påfyldning = destillat.createPåfyldning(40, f1, m2,
                 destillat, LocalDate.of(2023, 3, 21));
 

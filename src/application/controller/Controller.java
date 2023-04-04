@@ -72,18 +72,33 @@ public class Controller {
     /**
      * Opretter nyt Fad.<br />
      */
-    public Fad createFad(String ID, String fadType, int str, String kommentar) {
+    public Fad createFad(String fadType, int str, String kommentar) {
+
+//        if (ID <= 0 || fadType == null || str <= 0) {
+//            throw new IllegalArgumentException("ID, fadType og str må ikke være null");
+//        } else {
+//
+//            for (int i = 0; i < getFade().size(); i++) {
+//                if (getFade().get(i).getID() == ID) {
+//                    throw new IllegalArgumentException("Der er allerede oprette et ID af samme navn");
+//                }
+//            }
+//        } else
+
+
 
 //        for (int i = 0; i < storage.getFade().size(); i++) {
-//            if (storage.getFade().get(i).getID().equalsIgnoreCase(ID)) {
+//            if (getFade().get(i).getID() == ID) {
 //                throw new RuntimeException("Der er allerede oprettet et ID af samme navn");
 //            }
 //        }
-        if (ID == null || fadType == null || str < 1) {
+        if (fadType == null || str < 1) {
             throw new RuntimeException("ID, fadType og str må ikke være null");
         } else {
-            Fad fad = new Fad(ID, fadType, str, kommentar);
+            Fad fad = new Fad(fadType, str, kommentar);
             storage.addFad(fad);
+
+
             return fad;
         }
     }
@@ -245,11 +260,11 @@ public class Controller {
 
         Hylde h4 = controller.createHylde(3, l2, 5);
 
-        Fad f1 = controller.createFad("001", "Bourbon", 250, null);
+        Fad f1 = controller.createFad("Bourbon", 250, null);
         controller.placerFad(h1, 5, f1);
         f1.addFadHistorik("Rødvin");
 
-        Fad f2 = controller.createFad("002", "Rødvin", 150, "Ingen");
+        Fad f2 = controller.createFad("Rødvin", 150, "Ingen");
         controller.placerFad(h2, 7, f2);
 
         Medarbejder m1 = controller.createMedarbejder("Oscar", "123");
@@ -279,6 +294,24 @@ public class Controller {
         public void init() {
             initStorage();
         }
+
+    public static void main(String[] args) {
+
+
+
+        Fad f1 = new Fad("Bourbon", 250, null);
+        Fad f2 = new Fad("Bourbon", 250, null);
+        Fad f3 = new Fad("Bourbon", 250, null);
+        Fad f4 = new Fad("Bourbon", 250, null);
+        f1.addFadHistorik("Rødvin");
+
+
+        System.out.println(f1.getID());
+        System.out.println(f2.getID());
+        System.out.println(f3.getID());
+        System.out.println(f4.getID());
+//        System.out.println(f1.getCountID());
+    }
 
     }
 

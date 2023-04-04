@@ -27,15 +27,15 @@ class ControllerTest {
         l2 = controller.createLager("Containeren", "vej 2");
         h1 = l2.createHylde(1, l2, 10);
         h2 = l1.createHylde(2, l1, 10);
-        f1 = controller.createFad("001", "Borbon", 250, "Privat fad");
-        f2 = controller.createFad("002", "Borbon", 250, "Privat fad");
+        f1 = controller.createFad( "Borbon", 250, "Privat fad");
+        f2 = controller.createFad( "Borbon", 250, "Privat fad");
 
     }
 
     @Test
     void createFadTC1() {
         assertEquals(2, controller.getFade().size());
-        Fad fad = controller.createFad("Fad1", "Bourbon", 250, null);
+        Fad fad = controller.createFad( "Bourbon", 250, null);
         //assert
         assertNotNull(fad);
         assertTrue(controller.getFade().contains(fad));
@@ -44,7 +44,7 @@ class ControllerTest {
     }
     @Test
     void createFadTC2() {
-        Fad fad = controller.createFad("Fad2", "Bourbon", 50,"Privat Fad" );
+        Fad fad = controller.createFad("Bourbon", 50,"Privat Fad" );
         //assert
         assertNotNull(fad);
         assertTrue(controller.getFade().contains(fad));
@@ -55,14 +55,14 @@ class ControllerTest {
     @Test
     void createFadTC3() {
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
-            controller.createFad(null, "Bourbon", 50,"Privat Fad");
+            controller.createFad("Bourbon", 50,"Privat Fad");
         });
         assertEquals(runtimeException.getMessage(), "ID, fadType og str må ikke være null");
     }
     @Test
     void createFadTC4() {
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
-            controller.createFad("Fad1", null, 50,"Privat Fad");
+            controller.createFad( null, 50,"Privat Fad");
         });
         assertEquals(runtimeException.getMessage(), "ID, fadType og str må ikke være null");
     }
@@ -70,7 +70,7 @@ class ControllerTest {
     @Test
     void createFadTC5() {
         RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
-            controller.createFad("Fad1", "Bourbon", -10,"Privat Fad");
+            controller.createFad("Bourbon", -10,"Privat Fad");
         });
         assertEquals(runtimeException.getMessage(), "ID, fadType og str må ikke være null");
     }
