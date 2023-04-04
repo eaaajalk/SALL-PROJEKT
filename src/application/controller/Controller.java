@@ -75,11 +75,12 @@ public class Controller {
      * Opretter nyt Fad.<br />
      */
     public Fad createFad(String ID, String fadType, int str, String kommentar) {
-        for (int i = 0; i < storage.getFade().size(); i++) {
-            if (storage.getFade().get(i).getID().equalsIgnoreCase(ID)) {
-                throw new RuntimeException("Der er allerede oprettet et ID af samme navn");
-            }
-        }
+
+//        for (int i = 0; i < storage.getFade().size(); i++) {
+//            if (storage.getFade().get(i).getID().equalsIgnoreCase(ID)) {
+//                throw new RuntimeException("Der er allerede oprettet et ID af samme navn");
+//            }
+//        }
         if (ID == null || fadType == null || str < 1) {
             throw new RuntimeException("ID, fadType og str må ikke være null");
         } else {
