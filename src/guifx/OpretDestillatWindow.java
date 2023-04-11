@@ -35,22 +35,20 @@ public class OpretDestillatWindow extends Stage {
 
         Scene scene = new Scene(pane);
         this.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
     }
 
     public OpretDestillatWindow(String title) {
         this(title, null);
+
     }
 
     // -------------------------------------------------------------------------
-
-
-    private TextField txfName, txfHours;
     private Label lblError;
-    private TextField txfID1, txfMængde1, txfAlkoholProcent, txfMaltBatch, txfKornSort, txfTørv, txfVandtype, txfMedarbejder, txfKommentar;
+    private TextField txfID1, txfMængde1, txfAlkoholProcent, txfVandtype, txfKommentar;
 
     private ComboBox<MaltBatch> comboBox;
     private ComboBox<Medarbejder> comboBox1;
-
     private DatePicker dateStart, dateSlut;
     private void initContent(GridPane pane) {
         pane.setPadding(new Insets(10));
@@ -59,14 +57,23 @@ public class OpretDestillatWindow extends Stage {
         pane.setGridLinesVisible(false);
 
         Label lblID1 = new Label("ID:");
+        lblID1.setId("Overskrift3");
         Label lblStartDato = new Label("Start dato:");
+        lblStartDato.setId("Overskrift3");
         Label lblSlutDato = new Label("Slut dato:");
+        lblSlutDato.setId("Overskrift3");
         Label lblMængde1 = new Label("Mængde (L):");
+        lblMængde1.setId("Overskrift3");
         Label lblAlholProcent = new Label("Alkoholprocent");
+        lblAlholProcent.setId("Overskrift3");
         Label lblMaltBatch = new Label("MaltBatch:");
+        lblMaltBatch.setId("Overskrift3");
         Label lblVandtype = new Label("Vandtype:");
+        lblVandtype.setId("Overskrift3");
         Label lblMedarbejder = new Label("Medarbejder:");
+        lblMedarbejder.setId("Overskrift3");
         Label lblKommentar = new Label("Kommentar:");
+        lblKommentar.setId("Overskrift3");
 
         VBox vBox = new VBox(25);
         vBox.getChildren().addAll(lblID1, lblStartDato, lblSlutDato,lblMængde1,lblAlholProcent,lblMaltBatch, lblVandtype, lblMedarbejder, lblKommentar);
@@ -84,24 +91,23 @@ public class OpretDestillatWindow extends Stage {
         comboBox1.getItems().setAll(controller.getMedarbejdere());
         txfKommentar = new TextField();
 
-
-        VBox vBox1 = new VBox(15);
+        VBox vBox1 = new VBox(16);
         vBox1.getChildren().addAll(txfID1, dateStart, dateSlut, txfMængde1, txfAlkoholProcent, comboBox, txfVandtype, comboBox1, txfKommentar);
         pane.add(vBox1, 2, 0);
 
 
         Button btnCancel = new Button("Cancel");
-        pane.add(btnCancel, 0, 4);
+        pane.add(btnCancel, 0, 2);
         GridPane.setHalignment(btnCancel, HPos.LEFT);
         btnCancel.setOnAction(event -> this.cancelAction());
 
         Button btnOK = new Button("Opret");
-        pane.add(btnOK, 2, 4);
+        pane.add(btnOK, 2, 2);
         GridPane.setHalignment(btnOK, HPos.RIGHT);
         btnOK.setOnAction(event -> this.okAction());
 
         lblError = new Label();
-        pane.add(lblError, 0, 5);
+        pane.add(lblError, 0, 3);
         lblError.setStyle("-fx-text-fill: red");
 
         this.initControls();

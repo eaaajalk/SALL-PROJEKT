@@ -7,6 +7,7 @@ import application.model.WhiskyBatch;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -37,16 +38,25 @@ public class WhiskyPane extends GridPane {
         this.setHgap(10);
         this.setVgap(10);
         this.setGridLinesVisible(false);
+        this.setAlignment(Pos.CENTER);
         initContent();
     }
 
     private void initContent() {
-        Label lblOverskift = new Label("Whisky Batches:");
-        this.add(lblOverskift, 0, 0);
+        Label lblOverskrift = new Label("Whisky Oversigt");
+        this.add(lblOverskrift, 0, 0);
+        lblOverskrift.setId("PaneOverskrift");
+        lblOverskrift.setPadding(new Insets(0, 0, 20, 0));
+
+
+        Label lblOverskift1 = new Label("Whisky Batches:");
+        lblOverskift1.setId("Overskrift2");
+        this.add(lblOverskift1, 0, 1);
         lvwBatches = new ListView<>();
-        this.add(lvwBatches, 0, 1, 2, 4);
-        lvwBatches.setMaxWidth(300);
-        lvwBatches.setMaxHeight(350);
+        this.add(lvwBatches, 0, 2);
+        lvwBatches.setMaxWidth(350);
+        lvwBatches.setPrefWidth(350);
+        lvwBatches.setMaxHeight(450);
         lvwBatches.getItems().setAll(controller.getWhiskyBatches());
 
         ChangeListener<WhiskyBatch> listener = (ov, oldWhiskyBatch, newWhiskyBatch) -> this.selectedBatchChanged();
@@ -54,20 +64,31 @@ public class WhiskyPane extends GridPane {
 
         Separator separator = new Separator(Orientation.VERTICAL);
         separator.setMaxHeight(200);
-        separator.setPadding(new Insets(0,20,0,20));
-        this.add(separator, 2, 4);
+        separator.setPadding(new Insets(0,40,0,40));
+        this.add(separator, 2, 2);
+
+        Label lblInfo = new Label("Batch information:");
+        this.add(lblInfo, 3, 1, 2, 1);
+        lblInfo.setId("Overskrift2");
 
         Label lblID2 = new Label("ID:");
-        Label lblFortynding = new Label("Fortyndingsmængde(L):");
+        lblID2.setId("Overskrift3");
+        Label lblFortynding = new Label("Fortynding(L):");
+        lblFortynding.setId("Overskrift3");
         Label lblModning = new Label("Modningstid:");
+        lblModning.setId("Overskrift3");
         Label lblBatchDato = new Label("Batch dato:");
-        Label lblBatchMængde = new Label("BatchMængde:");
-        Label lblBeskrivelse = new Label("Beskrivelse:");
+        lblBatchDato.setId("Overskrift3");
+        Label lblBatchMængde = new Label("BatchMængde(L):");
+        lblBatchMængde.setId("Overskrift3");
+        Label lblBeskrivelse = new Label("Kommentar:");
+        lblBeskrivelse.setId("Overskrift3");
         Label lblFade = new Label("Fra fad(e):");
+        lblFade.setId("Overskrift3");
 
         VBox vBox = new VBox(25);
         vBox.getChildren().addAll(lblID2, lblFortynding, lblModning,lblBatchDato,lblBatchMængde, lblBeskrivelse,lblFade);
-        this.add(vBox, 3, 4);
+        this.add(vBox, 3, 2);
 
         txfID = new TextField();
         txfFortynding = new TextField();
@@ -76,29 +97,34 @@ public class WhiskyPane extends GridPane {
         txfBatchMængde = new TextField();
         txfBeskrivelse = new TextField();
         txfFade = new TextArea();
-        txfFade.setMaxWidth(350);
-        txfFade.setMaxHeight(100);
+        txfFade.setPrefWidth(500);
 
-
-        VBox vBox1 = new VBox(15);
+        VBox vBox1 = new VBox(17);
         vBox1.getChildren().addAll(txfID, txfFortynding, txfModning, txfBatchDato, txfBatchMængde, txfBeskrivelse, txfFade);
-        this.add(vBox1, 4, 4);
+        this.add(vBox1, 4, 2);
+        vBox1.setMaxWidth(300);
 
         Separator separator1 = new Separator(Orientation.VERTICAL);
         separator1.setMaxHeight(200);
-        separator1.setPadding(new Insets(0,20,0,20));
-        this.add(separator1, 5, 4);
+        separator1.setPadding(new Insets(0,40,0,40));
+        this.add(separator1, 5, 2);
 
+
+
+        Label lblWhisky = new Label("Flasker:");
+        lblWhisky.setId("Overskrift2");
+        this.add(lblWhisky, 6, 1);
         lvwProdukter = new ListView<>();
-        this.add(lvwProdukter, 6, 4);
-        lvwProdukter.setPrefWidth(300);
-        lvwProdukter.setMaxHeight(350);
+        this.add(lvwProdukter, 6, 2);
+        lvwProdukter.setMaxWidth(350);
+        lvwProdukter.setPrefWidth(350);
+        lvwProdukter.setMaxHeight(450);
 
         ChangeListener<Produkt> listener1 = (ov, oldProdukt, newProdukt) -> this.selectedProduktChanged();
         lvwProdukter.getSelectionModel().selectedItemProperty().addListener(listener1);
 
         Button btnHistorie = new Button("Se Historie");
-        this.add(btnHistorie, 6, 5);
+        this.add(btnHistorie, 6, 3);
         btnHistorie.setOnAction(event -> this.historieAction());
 
 
@@ -113,37 +139,71 @@ public class WhiskyPane extends GridPane {
 
         HBox hBoxBtn = new HBox(25);
         hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnTapning);
-        this.add(hBoxBtn, 0, 5);
+        this.add(hBoxBtn, 0, 3);
 
     }
 
     private void historieAction() {
         if (produkt != null) {
             Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setResizable(true);
             alert.setTitle("Whisky Historie");
 
 
             GridPane expContent = new GridPane();
+            ScrollPane scrollPane = new ScrollPane();
+
             expContent.setMaxWidth(Double.MAX_VALUE);
+            scrollPane.setContent(expContent);
+
 
             Label lblFlaskeInfo = new Label("Flaske information:");
-            lblFlaskeInfo.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 17));
+            lblFlaskeInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+            lblFlaskeInfo.setPadding(new Insets(0, 0, 10, 0));
             expContent.add(lblFlaskeInfo, 0, 0);
 
+
             Label lblflaske = new Label(produkt.produktHistorie());
-            lblflaske.setFont(Font.font("Helvetica", FontWeight.MEDIUM, 15));
+            lblflaske.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
             expContent.add(lblflaske, 0, 1);
 
             Separator separator = new Separator(Orientation.HORIZONTAL);
+            separator.setPadding(new Insets(20, 0, 20, 0));
             expContent.add(separator, 0, 2);
 
             Label lblWhiskyBatch = new Label("Batch information:");
-            lblWhiskyBatch.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 17));
+            lblWhiskyBatch.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+            lblWhiskyBatch.setPadding(new Insets(0, 0, 10, 0));
             expContent.add(lblWhiskyBatch, 0, 3);
 
             Label lblbatch = new Label(produkt.getWhiskyBatch().getHistorie());
-            lblbatch.setFont(Font.font("Helvetica", FontWeight.MEDIUM, 15));
+            lblbatch.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
             expContent.add(lblbatch, 0, 4);
+
+            Separator separator1 = new Separator(Orientation.HORIZONTAL);
+            separator1.setPadding(new Insets(20, 0, 20, 0));
+            expContent.add(separator1, 0, 5);
+
+            Label lblFad = new Label("Fad information:");
+            lblFad.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+            expContent.add(lblFad, 0, 6);
+
+            ArrayList<Fad> fade = new ArrayList<>(whiskyBatch.getFade().keySet());
+            for (int i = 0; i < whiskyBatch.getFade().size(); i++) {
+                Label lblFadi = new Label(fade.get(i).getHistorie());
+                lblFadi.setPadding(new Insets(10, 20, 0, 0));
+                expContent.add(lblFadi, i, 7);
+                lblFadi.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+
+            }
+
+            Separator separator2 = new Separator(Orientation.HORIZONTAL);
+            separator2.setPadding(new Insets(20, 0, 20, 0));
+            expContent.add(separator2, 0, 8);
+
+            Label lblDestillat = new Label("Destillat information:");
+            lblDestillat.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+            expContent.add(lblDestillat, 0, 9);
 
 
 

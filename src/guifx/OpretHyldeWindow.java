@@ -37,6 +37,7 @@ public class OpretHyldeWindow extends Stage {
 
         Scene scene = new Scene(pane);
         this.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
     }
 
     public OpretHyldeWindow(String title) {
@@ -54,7 +55,9 @@ public class OpretHyldeWindow extends Stage {
         pane.setGridLinesVisible(false);
 
         Label lblHyldeNr = new Label("Hylde nr:");
+        lblHyldeNr.setId("Overskrift3");
         Label lblAntalPladser = new Label("Antal hyldepladser:");
+        lblAntalPladser.setId("Overskrift3");
 
         VBox vBox = new VBox(25);
         vBox.getChildren().addAll(lblHyldeNr, lblAntalPladser);
@@ -68,17 +71,17 @@ public class OpretHyldeWindow extends Stage {
         pane.add(vBox1, 1, 0);
 
         Button btnCancel = new Button("Cancel");
-        pane.add(btnCancel, 0, 4);
+        pane.add(btnCancel, 0, 1);
         GridPane.setHalignment(btnCancel, HPos.LEFT);
         btnCancel.setOnAction(event -> this.cancelAction());
 
         Button btnOK = new Button("Opret");
-        pane.add(btnOK, 1, 4);
+        pane.add(btnOK, 1, 1);
         GridPane.setHalignment(btnOK, HPos.RIGHT);
         btnOK.setOnAction(event -> this.okAction());
 
         lblError = new Label();
-        pane.add(lblError, 0, 5);
+        pane.add(lblError, 0, 2);
         lblError.setStyle("-fx-text-fill: red");
 
         this.initControls();

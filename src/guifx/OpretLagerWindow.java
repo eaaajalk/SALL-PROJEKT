@@ -36,6 +36,7 @@ public class OpretLagerWindow extends Stage {
 
         Scene scene = new Scene(pane);
         this.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
     }
 
     public OpretLagerWindow(String title) {
@@ -53,7 +54,9 @@ public class OpretLagerWindow extends Stage {
         pane.setGridLinesVisible(false);
 
         Label lblNavn = new Label("Navn:");
+        lblNavn.setId("Overskrift3");
         Label lblAdresse = new Label("Adresse:");
+        lblAdresse.setId("Overskrift3");
 
 
         VBox vBox = new VBox(25);
@@ -69,17 +72,17 @@ public class OpretLagerWindow extends Stage {
         pane.add(vBox1, 1, 0);
 
         Button btnCancel = new Button("Annuller");
-        pane.add(btnCancel, 0, 4);
+        pane.add(btnCancel, 0, 1);
         GridPane.setHalignment(btnCancel, HPos.LEFT);
         btnCancel.setOnAction(event -> this.cancelAction());
 
         Button btnOK = new Button("Opret");
-        pane.add(btnOK, 1, 4);
+        pane.add(btnOK, 1, 1);
         GridPane.setHalignment(btnOK, HPos.RIGHT);
         btnOK.setOnAction(event -> this.okAction());
 
         lblError = new Label();
-        pane.add(lblError, 0, 5);
+        pane.add(lblError, 0, 2);
         lblError.setStyle("-fx-text-fill: red");
 
         this.initControls();

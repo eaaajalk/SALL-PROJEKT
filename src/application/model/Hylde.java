@@ -19,6 +19,7 @@ public class Hylde {
     }
 
     public void opretPladser(int antalPladser){
+
         for (int i = 1; i <= antalPladser; i++) {
             fade.put(i, null);
         }

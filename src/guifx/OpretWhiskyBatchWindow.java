@@ -64,13 +64,12 @@ public class OpretWhiskyBatchWindow  extends Stage {
         Label lblOverskift = new Label("Tilføj fade til dit nye whiskyBatch:");
         pane.add(lblOverskift, 0, 0);
 
-        Label lblID = new Label("     ID");
-        Label lblHylde = new Label("        Lager");
-        Label lblIndhold = new Label("Indhold(L)");
+        Label lblID = new Label("  ID");
+        Label lblHylde = new Label("    Lager");
+        Label lblIndhold = new Label("   Indhold(L)");
         Label lblModning = new Label("Modningstid (År)");
 
-
-        HBox hBox = new HBox(50);
+        HBox hBox = new HBox(30);
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblIndhold);
         hBox.getChildren().add(lblModning);
@@ -128,7 +127,7 @@ public class OpretWhiskyBatchWindow  extends Stage {
         pane.add(lblDato, 0, 8);
         pane.add(datePicker, 0, 9);
 
-        Label lblBeskrivelse = new Label("Beskrivelse:");
+        Label lblBeskrivelse = new Label("Kommentar:");
         txfBeskrivelse = new TextField();
         pane.add(lblBeskrivelse, 0, 10);
         pane.add(txfBeskrivelse, 0, 11);

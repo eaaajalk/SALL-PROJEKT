@@ -7,6 +7,7 @@ import application.model.Påfyldning;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -26,15 +27,25 @@ public class DestillatPane extends GridPane {
         this.setHgap(10);
         this.setVgap(10);
         this.setGridLinesVisible(false);
+        this.setAlignment(Pos.CENTER);
         initContent();
     }
     private void initContent() {
-        Label lblID = new Label("     ID");
-        Label lblFra = new Label("Fra");
-        Label lblTil = new Label("Til");
-        Label lblMængde = new Label("Restmængde(L)");
+        Label lblOverskrift = new Label("Destillat Oversigt");
+        lblOverskrift.setId("PaneOverskrift");
+        this.add(lblOverskrift, 0, 0);
+        lblOverskrift.setPadding(new Insets(0, 0, 15, 0));
 
-        HBox hBox = new HBox(80);
+        Label lblID = new Label("  ID");
+        lblID.setId("Overskrift2");
+        Label lblFra = new Label("Fra");
+        lblFra.setId("Overskrift2");
+        Label lblTil = new Label("Til");
+        lblTil.setId("Overskrift2");
+        Label lblMængde = new Label("Restmængde(L)");
+        lblMængde.setId("Overskrift2");
+        HBox hBox = new HBox(60);
+
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblFra);
         hBox.getChildren().add(lblTil);
@@ -43,9 +54,9 @@ public class DestillatPane extends GridPane {
         this.add(hBox, 0, 1);
 
         lvwDestillater = new ListView<>();
-        this.add(lvwDestillater, 0, 2, 2, 2);
+        this.add(lvwDestillater, 0, 2);
         lvwDestillater.setMaxWidth(395);
-        lvwDestillater.setMaxHeight(550);
+        lvwDestillater.setMaxHeight(600);
         lvwDestillater.getItems().setAll(controller.getDestillater());
 
         ChangeListener<Destillat> listener = (ov, oldDestillat, newDestillat) -> this.selectedDestillatChanged();
@@ -53,21 +64,37 @@ public class DestillatPane extends GridPane {
 
         Separator separator = new Separator(Orientation.VERTICAL);
         separator.setMaxHeight(200);
-        separator.setPadding(new Insets(0,20,0,20));
+        separator.setPadding(new Insets(0,40,0,40));
         this.add(separator, 1, 2);
 
+        Label lblInfo = new Label("Destillat information:");
+        lblInfo.setId("Overskrift2");
+        this.add(lblInfo, 2, 1, 2, 1);
+
         Label lblID1 = new Label("ID:");
+        lblID1.setId("Overskrift3");
         Label lblStartDato = new Label("Start dato:");
+        lblStartDato.setId("Overskrift3");
         Label lblSlutDato = new Label("Slut dato:");
+        lblSlutDato.setId("Overskrift3");
         Label lblMængde1 = new Label("Mængde (L):");
-        Label lblAlholProcent = new Label("Alkoholprocent");
+        lblMængde1.setId("Overskrift3");
+        Label lblAlholProcent = new Label("Alkoholprocent:");
+        lblAlholProcent.setId("Overskrift3");
         Label lblMaltBatch = new Label("MaltBatch:");
+        lblMaltBatch.setId("Overskrift3");
         Label lblKornSort = new Label("Kornsort:");
+        lblKornSort.setId("Overskrift3");
         Label lblTørv = new Label("Tørv:");
+        lblTørv.setId("Overskrift3");
         Label lblVandtype = new Label("Vandtype:");
+        lblVandtype.setId("Overskrift3");
         Label lblMedarbejder = new Label("Medarbejder:");
+        lblMedarbejder.setId("Overskrift3");
         Label lblKommentar = new Label("Kommentar:");
+        lblKommentar.setId("Overskrift3");
         Label lblTønder = new Label("Lagret på:");
+        lblTønder.setId("Overskrift3");
 
         VBox vBox = new VBox(25);
         vBox.getChildren().addAll(lblID1, lblStartDato, lblSlutDato,lblMængde1,lblAlholProcent,lblMaltBatch, lblKornSort, lblTørv, lblVandtype, lblMedarbejder, lblKommentar, lblTønder);
@@ -86,11 +113,11 @@ public class DestillatPane extends GridPane {
         txfKommentar = new TextField();
 
         txaTønder = new TextArea();
-        txaTønder.setMaxHeight(100);
+
         txaTønder.setMaxWidth(350);
 
 
-        VBox vBox1 = new VBox(15);
+        VBox vBox1 = new VBox(16.5);
         vBox1.getChildren().addAll(txfID1, txfStartDato, txfSlutDato, txfMængde1, txfAlkoholProcent, txfMaltBatch, txfKornSort, txfTørv, txfVandtype, txfMedarbejder, txfKommentar, txaTønder);
         this.add(vBox1, 3, 2);
 
@@ -103,9 +130,9 @@ public class DestillatPane extends GridPane {
         Button btnPåfyld = new Button("Hæld på fad");
         btnPåfyld.setOnAction(event -> this.påfyldAction());
 
-        HBox hBoxBtn = new HBox(67);
+        HBox hBoxBtn = new HBox(40);
         hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnPåfyld);
-        this.add(hBoxBtn, 0, 4);
+        this.add(hBoxBtn, 0, 3);
     }
 
     private void påfyldAction() {

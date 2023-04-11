@@ -18,7 +18,7 @@ import javafx.stage.StageStyle;
 public class OpretFadWindow extends Stage {
 
     private Fad fad;
-    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, txfFadHistorik;
+    private TextField txfID, txfStr, txfKommentar, txfFadHistorik;
 
     Controller controller;
     public OpretFadWindow(String title, Fad fad) {
@@ -36,6 +36,7 @@ public class OpretFadWindow extends Stage {
 
         Scene scene = new Scene(pane);
         this.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
     }
 
     public OpretFadWindow(String title) {
@@ -44,7 +45,6 @@ public class OpretFadWindow extends Stage {
 
     // -------------------------------------------------------------------------
 
-    private TextField txfName, txfHours;
     private Label lblError;
 
     private void initContent(GridPane pane) {
@@ -57,6 +57,10 @@ public class OpretFadWindow extends Stage {
         Label lblStr = new Label("Str (L):");
         Label lblKommentar = new Label("Kommentar:");
         Label lblHistorik = new Label("Fad historik:     ");
+        lblID2.setId("Overskrift3");
+        lblStr.setId("Overskrift3");
+        lblKommentar.setId("Overskrift3");
+        lblHistorik.setId("Overskrift3");
 
         VBox vBox = new VBox(25);
         vBox.getChildren().addAll(lblID2, lblStr,lblKommentar,lblHistorik);
@@ -64,7 +68,6 @@ public class OpretFadWindow extends Stage {
 
         txfID = new TextField();
         txfID.setText(Fad.getCountID());
-//        txfID.setEditable(false);
         txfID.setDisable(true);
         txfStr = new TextField();
         txfKommentar = new TextField();
@@ -75,17 +78,17 @@ public class OpretFadWindow extends Stage {
         pane.add(vBox1, 1, 0);
 
         Button btnCancel = new Button("Cancel");
-        pane.add(btnCancel, 0, 4);
+        pane.add(btnCancel, 0, 2);
         GridPane.setHalignment(btnCancel, HPos.LEFT);
         btnCancel.setOnAction(event -> this.cancelAction());
 
         Button btnOK = new Button("Opret");
-        pane.add(btnOK, 1, 4);
+        pane.add(btnOK, 1, 2);
         GridPane.setHalignment(btnOK, HPos.RIGHT);
         btnOK.setOnAction(event -> this.okAction());
 
         lblError = new Label();
-        pane.add(lblError, 0, 5);
+        pane.add(lblError, 0, 3);
         lblError.setStyle("-fx-text-fill: red");
 
         this.initControls();

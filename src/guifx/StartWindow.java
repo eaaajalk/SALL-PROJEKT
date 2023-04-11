@@ -26,7 +26,10 @@ public class StartWindow extends Application {
 
         Scene scene = new Scene(pane);
         stage.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
         stage.show();
+        stage.setMaximized(true);
+
     }
 
     // -------------------------------------------------------------------------

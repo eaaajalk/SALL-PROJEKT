@@ -20,7 +20,6 @@ import java.time.LocalDate;
 public class OmhældningsWindow extends Stage {
 
     private Fad fraFad, tilFad;
-    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, txfFadHistorik;
 
     Controller controller;
     public OmhældningsWindow(String title, Fad fad) {
@@ -38,6 +37,7 @@ public class OmhældningsWindow extends Stage {
 
         Scene scene = new Scene(pane);
         this.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
     }
 
     public OmhældningsWindow(String title) {
@@ -57,24 +57,28 @@ public class OmhældningsWindow extends Stage {
         pane.setVgap(10);
         pane.setGridLinesVisible(false);
 
-        Label lblVælg = new Label("Vælg et fad du vil omhælde til.");
+        Label lblVælg = new Label("Vælg et fad du vil omhælde til");
+        lblVælg.setId("Overskrift2");
         pane.add(lblVælg, 0, 0);
 
-        Label lblID = new Label("     ID");
-        Label lblLager = new Label("   Lager");
-        Label lblmodning = new Label("Modningstid (År)");
-        Label lblIndhold = new Label("Indhold(L)");
-
-        HBox hBox = new HBox(50);
+        Label lblID = new Label(" ID");
+        Label lblHylde = new Label("        Lager");
+        Label lblIndhold = new Label(" Indhold(L)");
+        Label lblModning = new Label("Modningstid (År)");
+        HBox hBox = new HBox(30);
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblIndhold);
-        hBox.getChildren().add(lblmodning);
-        hBox.getChildren().add(lblLager);
+        hBox.getChildren().add(lblModning);
+        hBox.getChildren().add(lblHylde);
         pane.add(hBox, 0, 1);
+        lblID.setId("Overskrift2");
+        lblHylde.setId("Overskrift2");
+        lblIndhold.setId("Overskrift2");
+        lblModning.setId("Overskrift2");
 
         lvwFade = new ListView<>();
         pane.add(lvwFade, 0, 2);
-        lvwFade.setPrefWidth(400);
+        lvwFade.setPrefWidth(500);
         lvwFade.setMaxHeight(350);
         lvwFade.getItems().setAll(controller.getFade());
         lvwFade.getItems().remove(fraFad);
@@ -86,12 +90,14 @@ public class OmhældningsWindow extends Stage {
         this.initControls();
 
         Label lblMængde = new Label("Mængde");
+        lblMængde.setId("Overskrift3");
         pane.add(lblMængde, 0, 3);
 
         txfMængde = new TextField();
         pane.add(txfMængde, 0, 4);
 
         Label lblDato = new Label("Omhældnings dato");
+        lblDato.setId("Overskrift3");
         pane.add(lblDato, 0, 5);
 
         datePicker = new DatePicker();
@@ -99,15 +105,15 @@ public class OmhældningsWindow extends Stage {
 
 
         lblError = new Label(" ");
-        pane.add(lblError, 0, 9);
+        pane.add(lblError, 0, 8);
 
         Button btnOk = new Button("Omhæld");
-        pane.add(btnOk, 0, 10);
+        pane.add(btnOk, 0, 7);
         GridPane.setHalignment(btnOk, HPos.RIGHT);
         btnOk.setOnAction(event -> this.okAction());
 
         Button btnCancel = new Button("Annuller");
-        pane.add(btnCancel, 0, 10);
+        pane.add(btnCancel, 0, 7);
         btnCancel.setOnAction(event -> this.cancelAction());
     }
 

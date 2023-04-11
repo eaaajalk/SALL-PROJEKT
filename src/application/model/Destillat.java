@@ -134,4 +134,8 @@ public class Destillat {
     public String getVandType() {
         return vandType;
     }
+
+    public String toString() {
+        return (getID() + "       " + getStartDato() + "     " + getSlutDato() + "               " + getMængde());
+    }
 }

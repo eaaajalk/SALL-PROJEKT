@@ -9,16 +9,19 @@ public class Produkt {
     private int pris;
     private LocalDate tapningsDato;
     private int unikID;
-    private static int idCount = 0;
+    private double mængde;
+    private static int idCount = 1;
 
 
-    public Produkt(int nr, WhiskyBatch whiskyBatch, int pris, LocalDate tapningsDato) {
+    public Produkt(int nr, WhiskyBatch whiskyBatch, int pris, LocalDate tapningsDato, double mængde) {
         this.nr = nr;
         this.whiskyBatch = whiskyBatch;
         this.pris = pris;
         this.tapningsDato = tapningsDato;
         this.unikID = idCount;
+        this.mængde = mængde;
         idCount++;
+
     }
 
     public int getNr() {

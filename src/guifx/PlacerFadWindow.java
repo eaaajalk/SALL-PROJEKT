@@ -37,6 +37,7 @@ public class PlacerFadWindow extends Stage {
 
         Scene scene = new Scene(pane);
         this.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
     }
 
     public PlacerFadWindow(String title) {
@@ -45,12 +46,10 @@ public class PlacerFadWindow extends Stage {
 
     // -------------------------------------------------------------------------
 
-    private TextField txfName, txfHours;
-    private Label lblError;
+
     private ComboBox<Lager> comboBox;
     private ComboBox<Hylde> comboBox1;
     private ComboBox<Integer> comboBox2;
-    private TextField txaDato;
     private Lager lager;
     private Hylde hylde;
     private int plads;
@@ -63,6 +62,7 @@ public class PlacerFadWindow extends Stage {
         pane.setGridLinesVisible(false);
 
         Label lblComp = new Label("Vælg lager:");
+        lblComp.setId("Overskrift3");
         pane.add(lblComp, 0, 0);
         comboBox = new ComboBox<>();
 
@@ -73,6 +73,7 @@ public class PlacerFadWindow extends Stage {
         comboBox.setOnAction(event -> this.lagerAction());
 
         Label lblHylder = new Label("Hylder:");
+        lblHylder.setId("Overskrift3");
         pane.add(lblHylder, 0, 2);
 
         comboBox1 = new ComboBox<>();
@@ -80,6 +81,7 @@ public class PlacerFadWindow extends Stage {
         comboBox1.setOnAction(event -> this.hyldeAction());
 
         Label lblPladser = new Label("Pladser:");
+        lblPladser.setId("Overskrift3");
         pane.add(lblPladser, 0, 4);
 
         comboBox2 = new ComboBox<>();
@@ -87,6 +89,7 @@ public class PlacerFadWindow extends Stage {
 
 
         Label lblDato = new Label("PlaceringsDato");
+        lblDato.setId("Overskrift3");
         pane.add(lblDato, 0, 6);
         datePicker = new DatePicker();
         pane.add(datePicker, 0, 7);

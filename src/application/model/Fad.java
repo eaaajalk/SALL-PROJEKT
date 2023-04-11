@@ -14,7 +14,6 @@ public class Fad {
     private final ArrayList<Påfyldning> påfyldninger = new ArrayList<>();
     private final ArrayList<Omhældning> omhældninger = new ArrayList<>();
     private LocalDate lagringsDato;
-
     private double modningsTid;
     private static int countID = 1;
 
@@ -42,6 +41,9 @@ public class Fad {
         return str;
     }
 
+    public ArrayList<Omhældning> getOmhældninger() {
+        return new ArrayList<>(omhældninger);
+    }
 
     public void setHylde(Hylde hylde, int Plads) {
         if (this.hylde != hylde) {
@@ -163,12 +165,38 @@ public class Fad {
         return tempID;
     }
 
+    public String getHistorie() {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbPå = new StringBuilder();
+        StringBuilder sbOm = new StringBuilder();
+
+        String id = "ID: " + getID();
+        String fadstr = "Fad str: " + getStr();
+        String påfyld = "Påfyldninger:";
+
+        for (int i = 0; i < getPåfyldninger().size(); i++) {
+            sbPå.append("Destillat ID: ").append(getPåfyldninger().get(i).getDestillat().getID()).append(" | Mængde: ").append(getPåfyldninger().get(i).getMængde()).append("L | Dato: ").append(getPåfyldninger().get(i).getPåfyldningsDato()).append("\n");
+        }
+
+        String omhæld = "Omhældninger:";
+
+        for (int i = 0; i < getOmhældninger().size(); i++) {
+            sbOm.append("Omhældt ").append(getOmhældninger().get(i).getMængde()).append("L fra Fad ID: ").append(getOmhældninger().get(i).getFraFad().getID()).append(" | Dato: ").append(getOmhældninger().get(i).getOmhældningsDato()).append("\n");
+        }
+        String modning = "Modningstid: " + getModningsTid();
+
+        sb.append(id).append("\n").append(fadstr).append("\n").append(modning).append(" år\n").append(påfyld).append("\n").append(sbPå.toString()).append("\n").append("\n").append(omhæld).append("\n").append(sbOm.toString());
+
+
+        return sb.toString();
+    }
+
     public String toString() {
         if (getHylde() == null) {
             return getID() + "                    " + getIndholdMængdeToString() + "                                     " + "Ikke placeret" + "                                         ";
 
         } else {
-            return getID() +"                  " + getIndholdMængdeToString() +"                              " + getModningsTid()+  "                             " +
+            return getID() +"           " + getIndholdMængdeToString() +"                     " + getModningsTid()+  "                  " +
                     "     " + getHylde().getLager().toString() + " (H" + getHylde().getHyldeNr() + ", P" + getFadPlads() + ")" ;
         }
     }

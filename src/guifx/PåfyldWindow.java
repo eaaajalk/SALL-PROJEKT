@@ -33,6 +33,7 @@ public class PåfyldWindow extends Stage {
 
         Scene scene = new Scene(pane);
         this.setScene(scene);
+        scene.getStylesheets().add("application/style.css");
     }
 
     public PåfyldWindow(String title) {
@@ -42,7 +43,7 @@ public class PåfyldWindow extends Stage {
     // -------------------------------------------------------------------------
 
 
-    private TextField txfMægnde, txfMedarbejder;
+    private TextField txfMægnde;
     private Fad fad;
     private ComboBox<Medarbejder> comboBox;
     private Label lblError;
@@ -58,23 +59,31 @@ public class PåfyldWindow extends Stage {
 
         Label lblComp = new Label("Vælg fad");
         pane.add(lblComp, 0, 0);
-        Label lblID = new Label("     ID");
+        lblComp.setId("Overskrift2");
+
+        Label lblID = new Label(" ID");
+        lblID.setPadding(new Insets(10, 0, 0, 0));
         Label lblHylde = new Label("        Lager");
-        Label lblIndhold = new Label("Indhold(L)");
+        lblHylde.setPadding(new Insets(10, 0, 0, 0));
+        Label lblIndhold = new Label(" Indhold(L)");
+        lblIndhold.setPadding(new Insets(10, 0, 0, 0));
         Label lblModning = new Label("Modningstid (År)");
-
-
-        HBox hBox = new HBox(50);
+        lblModning.setPadding(new Insets(10, 0, 0, 0));
+        HBox hBox = new HBox(30);
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblIndhold);
         hBox.getChildren().add(lblModning);
         hBox.getChildren().add(lblHylde);
         pane.add(hBox, 0, 1);
+        lblID.setId("Overskrift2");
+        lblHylde.setId("Overskrift2");
+        lblIndhold.setId("Overskrift2");
+        lblModning.setId("Overskrift2");
 
         lvwFade = new ListView<>();
         pane.add(lvwFade, 0, 2);
-        lvwFade.setPrefWidth(450);
-        lvwFade.setMaxHeight(350);
+        lvwFade.setPrefWidth(500);
+        lvwFade.setMaxHeight(450);
         lvwFade.getItems().setAll(controller.getFade());
 
 
@@ -82,18 +91,21 @@ public class PåfyldWindow extends Stage {
         lvwFade.getSelectionModel().selectedItemProperty().addListener(listener);
 
         Label lblMængde = new Label("Mægnde:");
+        lblMængde.setId("Overskrift3");
         pane.add(lblMængde, 0, 3);
 
         txfMægnde = new TextField();
         pane.add(txfMægnde, 0, 4);
 
         Label lblPladser = new Label("Påfyldningsdato:");
+        lblPladser.setId("Overskrift3");
         pane.add(lblPladser, 0, 5);
 
         datePicker = new DatePicker();
         pane.add(datePicker, 0, 6);
 
         Label lblMedarbejder = new Label("Medarbejder:");
+        lblMedarbejder.setId("Overskrift3");
         pane.add(lblMedarbejder, 0, 7);
 
         comboBox = new ComboBox<>();

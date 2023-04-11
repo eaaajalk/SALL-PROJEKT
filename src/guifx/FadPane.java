@@ -8,7 +8,9 @@ import application.model.Påfyldning;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,9 +22,7 @@ public class FadPane extends GridPane {
     private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, fadHistorik;
     private TextArea txaDestillater;
     private Fad fad;
-
     private ComboBox<Object> comboBox;
-
     private Controller controller;
 
     public FadPane() {
@@ -31,39 +31,53 @@ public class FadPane extends GridPane {
         this.setHgap(10);
         this.setVgap(10);
         this.setGridLinesVisible(false);
+        this.setAlignment(Pos.CENTER);
         initContent();
+
     }
 
     private void initContent() {
-        Label lblComp = new Label("  Sorter efter");
-        this.add(lblComp, 0, 0);
-        comboBox = new ComboBox<>();
+        Label lblOverskrift = new Label("Fad Oversigt");
+        this.add(lblOverskrift, 0, 0);
+        lblOverskrift.setId("PaneOverskrift");
+        lblOverskrift.setPadding(new Insets(0, 0, 20, 0));
 
-        this.add(comboBox, 0, 1);
+        Label lblComp = new Label("Sorter efter");
+        this.add(lblComp, 0, 1);
+        comboBox = new ComboBox<>();
+        lblComp.setId("Overskrift2");
+
+        this.add(comboBox, 0, 2);
         for (int i = 0; i < controller.getLagere().size(); i++) {
             comboBox.getItems().add("" + controller.getLagere().get(i));
         }
-
         comboBox.getItems().add("Ikke placerede fade");
         comboBox.getItems().add("Alle fade");
 
+
         comboBox.setOnAction(event -> this.sortAction());
 
-        Label lblID = new Label("     ID");
+        Label lblID = new Label(" ID");
+        lblID.setPadding(new Insets(10, 0, 0, 0));
         Label lblHylde = new Label("        Lager");
-        Label lblIndhold = new Label("Indhold(L)");
+        lblHylde.setPadding(new Insets(10, 0, 0, 0));
+        Label lblIndhold = new Label(" Indhold(L)");
+        lblIndhold.setPadding(new Insets(10, 0, 0, 0));
         Label lblModning = new Label("Modningstid (År)");
-
-
-        HBox hBox = new HBox(50);
+        lblModning.setPadding(new Insets(10, 0, 0, 0));
+        HBox hBox = new HBox(30);
         hBox.getChildren().add(lblID);
         hBox.getChildren().add(lblIndhold);
         hBox.getChildren().add(lblModning);
         hBox.getChildren().add(lblHylde);
         this.add(hBox, 0, 3);
+        lblID.setId("Overskrift2");
+        lblHylde.setId("Overskrift2");
+        lblIndhold.setId("Overskrift2");
+        lblModning.setId("Overskrift2");
 
         lvwFade = new ListView<>();
-        this.add(lvwFade, 0, 4, 2, 4);
+        this.add(lvwFade, 0, 4);
         lvwFade.setPrefWidth(450);
         lvwFade.setMaxHeight(450);
         lvwFade.getItems().setAll(controller.getFade());
@@ -73,17 +87,25 @@ public class FadPane extends GridPane {
 
         Separator separator = new Separator(Orientation.VERTICAL);
         separator.setMaxHeight(200);
-        separator.setPadding(new Insets(0,10,0,10));
+        separator.setPadding(new Insets(0,40,0,40));
         this.add(separator, 2, 4);
 
         Label lblID2 = new Label("ID:");
+        lblID2.setId("Overskrift3");
         Label lblStr = new Label("Str (L):");
+        lblStr.setId("Overskrift3");
         Label lblLager2 = new Label("Lager:");
+        lblLager2.setId("Overskrift3");
         Label lblHylde2 = new Label("Hylde:");
+        lblHylde2.setId("Overskrift3");
         Label lblDato = new Label("Lagrings Dato:");
+        lblDato.setId("Overskrift3");
         Label lblKommentar = new Label("Kommentar:");
+        lblKommentar.setId("Overskrift3");
         Label lblHistorik = new Label("Fad historik:      ");
+        lblHistorik.setId("Overskrift3");
         Label lblDestillat = new Label("Indhold:");
+        lblDestillat.setId("Overskrift3");
 
         VBox vBox = new VBox(25);
         vBox.getChildren().addAll(lblID2, lblStr, lblLager2,lblHylde2,lblDato,lblKommentar,lblHistorik, lblDestillat);
@@ -97,12 +119,14 @@ public class FadPane extends GridPane {
         txfKommentar = new TextField();
         fadHistorik = new TextField();
         txaDestillater = new TextArea();
-        txaDestillater.setMaxWidth(350);
-        txaDestillater.setMaxHeight(100);
 
-        VBox vBox1 = new VBox(15);
+        VBox vBox1 = new VBox(16);
         vBox1.getChildren().addAll(txfID,txfStr,txfLager,txfHylde,txfLagerDato,txfKommentar, fadHistorik, txaDestillater);
         this.add(vBox1, 4, 4);
+
+        Label lblinf = new Label("Fad information:");
+        this.add(lblinf, 3, 3, 2, 1);
+        lblinf.setId("Overskrift2");
 
 
         Button btnOpret = new Button("Opret Fad");
@@ -119,7 +143,7 @@ public class FadPane extends GridPane {
 
         HBox hBoxBtn = new HBox(50);
         hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnPlacer, btnOmhæld);
-        this.add(hBoxBtn, 0, 8);
+        this.add(hBoxBtn, 0, 5);
 
     }
 
@@ -135,7 +159,6 @@ public class FadPane extends GridPane {
     }
 
     private void sletAction() {
-
         fad = lvwFade.getSelectionModel().getSelectedItem();
         if (fad != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -152,7 +175,7 @@ public class FadPane extends GridPane {
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Slet fad");
-                alert.setHeaderText("Du kan ikke slette et fad der er på lageret");
+                alert.setHeaderText("Vælg et fad");
                 // wait for the modal dialog to close
                 alert.show();
 
@@ -211,11 +234,21 @@ public class FadPane extends GridPane {
             fadHistorik.setText(sb.toString());
 
             StringBuilder sb1 = new StringBuilder();
+            StringBuilder sb2 = new StringBuilder();
+
             for (int i = 0; i < fad.getPåfyldninger().size(); i++) {
                 Påfyldning påfyldning = fad.getPåfyldninger().get(i);
-                sb1.append("Den ").append(påfyldning.getPåfyldningsDato()).append(" er påfyldt ").append(påfyldning.getMængde()).append("L destillatID: ").append(påfyldning.getDestillat().getID()).append("");
+                sb1.append("Den ").append(påfyldning.getPåfyldningsDato()).append(" er påfyldt ").append
+                        (påfyldning.getMængde()).append("L destillatID: ").append(påfyldning.getDestillat().getID()).append("\n");
             }
-            txaDestillater.setText(sb1.toString());
+            for (int i = 0; i < fad.getOmhældninger().size(); i++) {
+                Omhældning omhældning = fad.getOmhældninger().get(i);
+                sb2.append("Den ").append(omhældning.getOmhældningsDato()).append(" er omhældt ").append
+                        (omhældning.getMængde()).append("L fra fad ID: ").append(omhældning.getFraFad().getID()).append("\n");
+
+
+            }
+            txaDestillater.setText("Påfyldninger: \n" + sb1.toString() + "\n \nOmhældninger: \n" + sb2.toString());
 
 
         } else {

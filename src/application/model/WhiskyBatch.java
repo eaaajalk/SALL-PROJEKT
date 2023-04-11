@@ -29,16 +29,25 @@ public class WhiskyBatch {
         addFad(fad, fadMængde);
     }
 
-    public Produkt createFlaske(int nr, int pris, LocalDate tapningsDato) {
-        Produkt produkt = new Produkt(nr, this, pris, tapningsDato);
+    public Produkt createFlaske(int nr, int pris, LocalDate tapningsDato, double mængde) {
+        Produkt produkt = new Produkt(nr, this, pris, tapningsDato, mængde);
         produkter.add(produkt);
         return produkt;
     }
 
-    public void tapPåFlasker(int pris, LocalDate tapningsDato, int antalFlasker) {
-        for (int i = 1; i < antalFlasker; i++) {
-            createFlaske(i, pris, tapningsDato);
+    public void tapPåFlasker(int pris, LocalDate tapningsDato, int antalFlasker, double mængde) {
+        if (antalFlasker * mængde > getBatchMængde()) {
+            throw new RuntimeException("Du har ikke nok whisky til at oprette så mange flasker");
         }
+        for (int i = 1; i < antalFlasker; i++) {
+            createFlaske(i, pris, tapningsDato, mængde);
+        }
+        int tapningsMængde = (int) (antalFlasker * mængde);
+        setBatchMængde(getBatchMængde() - tapningsMængde);
+    }
+
+    public void setBatchMængde(int batchMængde) {
+        this.batchMængde = batchMængde;
     }
 
     public int beregnAntalFlasker(int batchMængde, double flaskeStr) {
@@ -133,15 +142,15 @@ public class WhiskyBatch {
         String date = "Lavet den: " + getBatchDato();
         String fortynding = "Fortyndingsmængde: " + getFortyndningsMængde();
         String beskrivelse = "Kommentar: " + getBeskrivelse();
-        String fade = "WhiskyBatch ID: " + getBatchID() + " er lavet af følgende fad(e):";
+        String fade = "Lavet af følgende fad(e):";
         ArrayList<Fad> keySet = new ArrayList<>(getFade().keySet());
         for (int i = 0; i < getFade().size(); i++) {
-            sb.append("FadID: ").append(keySet.get(i).getID()).append(" | Mængde: ").append(getFade().get(keySet.get(i))).append("\n");
+            sb.append("FadID: ").append(keySet.get(i).getID()).append(" | Mængde: ").append(getFade().get(keySet.get(i))).append("L \n");
         }
 
 
-        sb1.append("\n").append(id).append("\n").append(modning).append("\n").append(date).append("\n")
-                .append("\n").append(fortynding).append("\n").append(beskrivelse).append("\n").append(fade).append("\n").append(sb);
+        sb1.append(id).append("\n").append(modning).append("\n").append(date).append("\n")
+                .append(fortynding).append("L\n").append(beskrivelse).append("\n").append(fade).append("\n").append(sb);
 
         return String.valueOf(sb1);
 

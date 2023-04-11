@@ -269,7 +269,7 @@ public class Controller {
         WhiskyBatch w1 = controller.createWhiskyBatch("1", 10, 48,
                 "Første release", LocalDate.of(2026, 5, 31), 50, f2);
 
-        w1.tapPåFlasker(100, LocalDate.now(), 85);
+        w1.tapPåFlasker(100, LocalDate.now(), 85, 0.7);
 
     }
         public void init() {

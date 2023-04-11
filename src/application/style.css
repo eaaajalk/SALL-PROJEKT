@@ -1,0 +1,47 @@
+.root {
+    -fx-font-family: 'Verdana';
+    -fx-font-size: 12px;
+
+
+}
+
+#PaneOverskrift {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+#Overskrift2 {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+#Overskrift3 {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+
+  -fx-background-opacity: 0.5;
+
+}
+.text-area .content {
+
+}
+.listview .content {
+
+}
+
+.list-view .list-cell:even {
+
+}
+
+.list-view .list-cell:odd {
+
+}
+
+.button{
+
+    -fx-font-size: 12px;
+     -fx-font-weight: bold;
+}
+
