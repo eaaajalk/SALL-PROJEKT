@@ -9,7 +9,7 @@ public class Påfyldning {
     private LocalDate påfyldningsDato;
     private Fad fad;
 
-    public Påfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
+    Påfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
         this.mængde = mængde;
         this.medarbejder = medarbejder;
         this.destillat = destillat;

@@ -11,7 +11,7 @@ public class Hylde {
     private int antalHyldePladser;
 
 
-    public Hylde (int hyldeNr, Lager lager, int antalHyldePladser) {
+    Hylde (int hyldeNr, Lager lager, int antalHyldePladser) {
         this.hyldeNr = hyldeNr;
         this.lager = lager;
         this.antalHyldePladser = antalHyldePladser;

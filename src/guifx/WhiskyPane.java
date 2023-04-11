@@ -205,9 +205,23 @@ public class WhiskyPane extends GridPane {
             lblDestillat.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
             expContent.add(lblDestillat, 0, 9);
 
+            for (Fad fad : fade) {
+                for (int j = 0; j < fad.getPåfyldninger().size(); j++) {
+                    Label lblDestillati = new Label(fad.getPåfyldninger().get(j).getDestillat().getHistorie());
+                    lblDestillati.setPadding(new Insets(10, 20, 0, 0));
+                    expContent.add(lblDestillati, j, 10);
+                    lblDestillati.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+                }
+            }
+
+            Separator separator3 = new Separator(Orientation.HORIZONTAL);
+            separator3.setPadding(new Insets(20, 0, 20, 0));
+            expContent.add(separator3, 0, 11);
 
 
-            alert.getDialogPane().setContent(expContent);
+
+
+            alert.getDialogPane().setContent(scrollPane);
             alert.getDialogPane().setPrefSize(800, 600); // Angiver en bredde og højde på Alert-boksen
 
             ButtonType lukButtonType = ButtonType.CLOSE; // Tilføjer en "Luk"-knap

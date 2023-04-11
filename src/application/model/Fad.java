@@ -185,7 +185,7 @@ public class Fad {
         }
         String modning = "Modningstid: " + getModningsTid();
 
-        sb.append(id).append("\n").append(fadstr).append("\n").append(modning).append(" år\n").append(påfyld).append("\n").append(sbPå.toString()).append("\n").append("\n").append(omhæld).append("\n").append(sbOm.toString());
+        sb.append(id).append("\n").append(fadstr).append("\n").append(modning).append(" år\n").append("\n").append(påfyld).append("\n").append(sbPå.toString()).append("\n").append(omhæld).append("\n").append(sbOm.toString());
 
 
         return sb.toString();
