@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Hylde {
-    private int hyldeNr;
-    private Lager lager;
+    private int hyldeNr; // Hyldens nummer.
+    private Lager lager; // Link til lager.
     private Map<Integer, Fad> fade = new HashMap<>();
-    private int antalHyldePladser;
-
+    private int antalHyldePladser; // Det antal pladser der er på hylden.
 
     Hylde (int hyldeNr, Lager lager, int antalHyldePladser) {
         this.hyldeNr = hyldeNr;
@@ -17,14 +16,14 @@ public class Hylde {
         this.antalHyldePladser = antalHyldePladser;
         opretPladser(antalHyldePladser);
     }
-
+    /**
+     * Opretter automatisk et HashMap der holder styr på hvor mange pladser der er på en hylde. <br />
+     */
     public void opretPladser(int antalPladser){
-
         for (int i = 1; i <= antalPladser; i++) {
             fade.put(i, null);
         }
     }
-
     public int getHyldeNr() {
         return hyldeNr;
     }
@@ -32,13 +31,21 @@ public class Hylde {
     public Lager getLager() {
         return lager;
     }
+    /**
+     * @return Hyldens Fad-objekter som liste af typen fad.
+     */
     public ArrayList<Fad> getFadeList() {
         return new ArrayList<>(fade.values());
     }
+    /**
+     * @return Hyldens map der indeholder Fade som values og deres pladser som keys.
+     */
     public Map<Integer, Fad> getFadeMap() {
         return new HashMap<>(fade);
     }
-
+    /**
+     * Tilføjer et fad til en plads på hylden. <br />
+     */
     public void addFad(Fad fad, int Plads) {
         if (fade.size() >= Plads && Plads > 0) {
             if (!fade.containsValue(fad)) {
@@ -56,7 +63,12 @@ public class Hylde {
             fad.setHylde(null, getHyldePlads(fad));
         }
     }
-
+    /**
+     * Returnerer et Fad's hyldeplads. <br />
+     * Requires:
+     * @param fad skal stå på en hylde.
+     * @return fadets plads
+     */
     public int getHyldePlads (Fad fad) {
         int key = -1;
         for (Map.Entry<Integer, Fad> entry : fade.entrySet()) {
@@ -66,12 +78,9 @@ public class Hylde {
         }
         return key;
     }
-
         public int getAntalPladser() {
         return antalHyldePladser;
     }
-
-
     @Override
     public String toString(){
         return String.valueOf(hyldeNr);

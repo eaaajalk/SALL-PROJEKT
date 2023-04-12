@@ -157,15 +157,11 @@ public class DestillatPane extends GridPane {
         lvwDestillater.getItems().setAll(controller.getDestillater());
         int index = lvwDestillater.getItems().size() - 1;
         lvwDestillater.getSelectionModel().select(index);
-
-
     }
-
     private void selectedDestillatChanged() {
         this.updateControls();
     }
     public void updateControls() {
-
         destillat = lvwDestillater.getSelectionModel().getSelectedItem();
         if (destillat != null) {
             txfID1.setText(destillat.getID());

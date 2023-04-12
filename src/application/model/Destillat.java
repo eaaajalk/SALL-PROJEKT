@@ -9,7 +9,7 @@ import java.util.concurrent.ForkJoinPool;
 public class Destillat {
     private LocalDate startDato;
     private LocalDate slutDato;
-    private int mængde;
+    private int mængde; // Den mængde der er lavet af dette destillat.
     private Medarbejder medarbejder;
     private int alkoholProcent = 0;
     private String kommentar;
@@ -32,6 +32,11 @@ public class Destillat {
      * @param alkoholProcent != null
      */
     public Destillat(LocalDate startDato, LocalDate slutDato, int mængde, Medarbejder medarbejder, String kommentar, String vandType, MaltBatch maltBatch, String ID, int alkoholProcent) {
+        if (slutDato.isBefore(startDato)) { throw new IllegalArgumentException("Slut dato er mindre end start dato");}
+        if (mængde <= 0) { throw new IllegalArgumentException("Mængde må ikke være 0 eller mindre");}
+        if (Integer.parseInt(ID) <= 0) { throw new IllegalArgumentException("ID må ikke være negativ");}
+        if (alkoholProcent < 0 || alkoholProcent > 100) { throw new IllegalArgumentException("Alkoholprocenten skal være mellem 0 til 100");}
+
         this.startDato = startDato;
         this.slutDato = slutDato;
         this.mængde = mængde;
@@ -41,31 +46,16 @@ public class Destillat {
         this.maltBatch = maltBatch;
         this.ID = ID;
         this.alkoholProcent = alkoholProcent;
-
-        if (slutDato.isBefore(startDato)) {
-            throw new IllegalArgumentException("Slut dato er mindre end start dato");
-        } if (mængde <= 0) {
-            throw new IllegalArgumentException("Mængde må ikke være 0 eller mindre");
-        } if (Integer.parseInt(ID) <= 0) {
-            throw new IllegalArgumentException("ID må ikke være negativ");
-        } if (alkoholProcent < 0 || alkoholProcent > 100) {
-            throw new IllegalArgumentException("Alkoholprocenten skal være mellem 0 til 100");
-        }
     }
-
-    public ArrayList<Påfyldning> getPåfyldninger() {
-        return new ArrayList<>(påfyldninger);
-    }
-
     /**
-     * Opretter et ny Påfyldning objekt. <br />
+     * Opretter et ny Påfyldnings objekt som komposition af dette Destillat. <br />
      * Requires:
      * @param mængde != null, mængde > 0, mængde < fad størrelse
      * @param fad != null
      * @param medarbejder != null
      * @param destillat != null
      * @param påfyldningsDato != null, påfyldningsdato >= destillat slutdato
-     * @return
+     * @return påfyldningen
      */
     public Påfyldning createPåfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
         if (mængde <= 0) {
@@ -77,23 +67,22 @@ public class Destillat {
         } else {
         Påfyldning påfyldning = new Påfyldning(mængde, fad, medarbejder, destillat, påfyldningsDato);
         påfyldninger.add(påfyldning);
+        setMængde(getMængde()-påfyldning.getMængde());
         return påfyldning;
         }
     }
-
     /**
-     * Tilføjere Destillat obkejtet et Påfyldning objekt. <br />
+     * Tilføjer Destillat-objektet et Påfyldnings-objekt. <br />
      * Requires:
      * @param påfyldning != null
      */
     public void addPåfyldning(Påfyldning påfyldning) {
-        if (påfyldning == null) {
-            throw new IllegalArgumentException("Påfyldning må ikke være null");
-        } else {
-            if (!påfyldninger.contains(påfyldning)) {
+        if (!påfyldninger.contains(påfyldning)) {
                 påfyldninger.add(påfyldning);
         }
     }
+    public ArrayList<Påfyldning> getPåfyldninger() {
+        return new ArrayList<>(påfyldninger);
     }
     public void removePåfyldning(Påfyldning påfyldning) {
         if (påfyldninger.contains(påfyldning)) {
@@ -106,38 +95,33 @@ public class Destillat {
     public MaltBatch getMaltBatch() {
         return maltBatch;
     }
-
     public String getID() {
         return ID;
     }
-
     public LocalDate getSlutDato() {
         return slutDato;
     }
-
     public int getAlkoholProcent() {
         return alkoholProcent;
     }
-
     public LocalDate getStartDato() {
         return startDato;
     }
-
     public int getMængde() {
         return mængde;
     }
-
     public String getKommentar() {
         return kommentar;
     }
-
     public String getVandType() {
         return vandType;
+    }
+    public void setMængde(int mængde) {
+        this.mængde = mængde;
     }
 
     public String getHistorie() {
         StringBuilder sb = new StringBuilder();
-
         String id = "ID: " + getID();
         String mængde = "Mængde: " + getMængde();
         String start = "Startdato: " + getStartDato();
@@ -149,14 +133,12 @@ public class Destillat {
         String maltBatch = "Maltbatch nr: " + getMaltBatch().getBatchNr();
         String tørv = "Tørv: " + getMaltBatch().getTørv();
         String kornSort = "Kornsort: " + getMaltBatch().getKornSort();
-
         sb.append(id).append("\n").append(mængde).append("L\n").append(start).append("\n").append(slut).append("\n")
                 .append(alkohol).append("\n").append(medarbejder).append("\n").append(kommentar).append("\n").append(vand).append("\n").
                 append(maltBatch).append("\n").append(tørv).append("\n").append(kornSort);
 
         return sb.toString();
     }
-
     public String toString() {
         return (getID() + "       " + getStartDato() + "     " + getSlutDato() + "               " + getMængde());
     }

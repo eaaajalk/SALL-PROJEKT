@@ -141,8 +141,6 @@ public class OmhældningsWindow extends Stage {
         }
         // Call controller methods
         fraFad.createOmhældning(mængde, dato, tilFad);
-
-
         this.hide();
 
     }

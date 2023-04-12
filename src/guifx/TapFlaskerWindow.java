@@ -130,7 +130,7 @@ public class TapFlaskerWindow extends Stage {
                 lblError.setText("Du kan ikke oprette så mange flasker af dette whisky batch");
             }
             // Call controller methods
-            whiskyBatch.tapPåFlasker(pris, dato, antal, str*antal);
+            whiskyBatch.tapPåFlasker(pris, dato, antal, str);
             this.hide();
 
         }

@@ -80,7 +80,15 @@ public class OpretWhiskyBatchWindow  extends Stage {
         pane.add(lvwFade, 0, 2);
         lvwFade.setPrefWidth(450);
         lvwFade.setMaxHeight(200);
+
+        ArrayList<Fad> nulFade = new ArrayList<>();
+        for (int i = 0; i < controller.getFade().size(); i++) {
+            if (controller.getFade().get(i).getIndholdsMængde() < 1) {
+                nulFade.add(controller.getFade().get(i));
+            }
+        }
         lvwFade.getItems().setAll(controller.getFade());
+        lvwFade.getItems().removeAll(nulFade);
 
 
         ChangeListener<Fad> listener = (ov, oldFad, newFad) -> this.selectedFadChanged();

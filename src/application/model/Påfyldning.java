@@ -18,7 +18,6 @@ public class Påfyldning {
         this.fad = fad;
         this.fad.addIndholdsMængde(mængde);
     }
-
     public int getMængde() {
         return mængde;
     }

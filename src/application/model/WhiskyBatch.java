@@ -8,15 +8,17 @@ import java.util.Map;
 
 public class WhiskyBatch {
     private String batchID;
-    private int fortyndningsMængde;
+    private int fortyndningsMængde; // Mængden af tilføjet vand.
     private int alkoholProcent;
     private Map<Fad, Integer> fade = new HashMap<>();
     private int modningsTid;
     private String beskrivelse;
     private LocalDate batchDato;
     private ArrayList<Produkt> produkter = new ArrayList<Produkt>();
-    private int batchMængde;
+    private double batchMængde;
     private LocalDate lagringsDato;
+    private ArrayList<String> fadHistorierList = new ArrayList<>(); // Gemmer fadenes historie
+    private ArrayList<String> destillatHistorierList = new ArrayList<>(); // Gemmer fadenes destillat-historier.
 
     public WhiskyBatch(String batchID, int fortyndningsMængde, int alkoholProcent, String beskrivelse, LocalDate batchDato, int fadMængde, Fad fad) {
         this.batchID = batchID;
@@ -29,94 +31,100 @@ public class WhiskyBatch {
         addFad(fad, fadMængde);
     }
 
-    public Produkt createFlaske(int nr, int pris, LocalDate tapningsDato, double mængde) {
-        Produkt produkt = new Produkt(nr, this, pris, tapningsDato, mængde);
+    public Produkt createFlaske(int nr, int pris, LocalDate tapningsDato, double flaskeStr) {
+        Produkt produkt = new Produkt(nr, this, pris, tapningsDato, flaskeStr);
         produkter.add(produkt);
         return produkt;
     }
-
-    public void tapPåFlasker(int pris, LocalDate tapningsDato, int antalFlasker, double mængde) {
-        if (antalFlasker * mængde > getBatchMængde()) {
-            throw new RuntimeException("Du har ikke nok whisky til at oprette så mange flasker");
+    public void tapPåFlasker(int pris, LocalDate tapningsDato, int antalFlasker, double flaskeStr) {
+        if (flaskeStr * antalFlasker > batchMængde) {
+            throw new RuntimeException("Du har ikke nok whisky til at tappe så mange flasker");
         }
         for (int i = 1; i < antalFlasker; i++) {
-            createFlaske(i, pris, tapningsDato, mængde);
+            createFlaske(i, pris, tapningsDato, flaskeStr);
         }
-        int tapningsMængde = (int) (antalFlasker * mængde);
+        int tapningsMængde = (int) (antalFlasker * flaskeStr);
         setBatchMængde(getBatchMængde() - tapningsMængde);
     }
-
-    public void setBatchMængde(int batchMængde) {
+    public void setBatchMængde(double batchMængde) {
         this.batchMængde = batchMængde;
     }
-
-    public int beregnAntalFlasker(int batchMængde, double flaskeStr) {
+    public int beregnAntalFlasker(double batchMængde, double flaskeStr) {
         return (int) (batchMængde / flaskeStr);
     }
-
     public void updateModningsTid() {
         long diff = ChronoUnit.YEARS.between(getLagringsDato(), batchDato);
         this.modningsTid = (int) diff;
     }
-
     public int getModningstid() {
        return modningsTid;
     }
-
     public LocalDate getBatchDato() {
         return batchDato;
     }
-
     public String getBatchID() {
         return batchID;
     }
-
     public int getFortyndningsMængde() {
         return fortyndningsMængde;
     }
-
     public int getAlkoholProcent() {
         return alkoholProcent;
     }
-
     public HashMap<Fad, Integer> getFade() {
         return new HashMap<>(fade);
     }
-
     public String getBeskrivelse() {
         return beskrivelse;
     }
-
     public ArrayList<Produkt> getProdukter() {
         return produkter;
     }
-
-    public int getBatchMængde() {
+    public double getBatchMængde() {
         return batchMængde;
     }
-
     public void addFad(Fad fad, int mængde) {
-        if (fad.getIndholdsMængde() >= mængde) {
-            updateMængde(mængde);
-            setLagringsDato(fad.getLagringsDato());
-            if (!fade.containsKey(fad)) {
-                fade.put(fad, mængde);
-                fad.setIndholdsMængde(fad.getIndholdsMængde()-mængde);
-                } else {
-                int m = fade.get(fad);
-                fade.put(fad, m + mængde);
-                fad.setIndholdsMængde(fad.getIndholdsMængde()-mængde);
-            }
-        } else {
+        if (fad.getIndholdsMængde() < mængde) {
             throw new RuntimeException("Mængden er større end fadets indhold");
         }
+            if (!fade.containsKey(fad)) {
+                fade.put(fad, mængde);
+            } else {
+                int m = fade.get(fad);
+                fade.put(fad, m + mængde);
+            }
+        setLagringsDato(fad.getLagringsDato());
+        addHistorier(fad);
+        updateMængde(mængde, fad);
     }
-
-    private void updateMængde(int mængde) {
+    public void addHistorier(Fad fad) {
+        fadHistorierList.add(fad.getHistorie());
+        for (int i = 0; i < fad.getPåfyldninger().size(); i++) {
+            String destillatHistorie = fad.getPåfyldninger().get(i).getDestillat().getHistorie();
+            destillatHistorierList.add(destillatHistorie);
+        }
+    }
+    public ArrayList<String> getDestillatHistorierList() {
+        return new ArrayList<>(destillatHistorierList);
+    }
+    private void updateMængde(int mængde, Fad fad) {
         this.batchMængde += mængde;
-
+        fad.setIndholdsMængde(fad.getIndholdsMængde()-mængde);
+        if (fad.getIndholdsMængde() == 0) {
+            fad.addFadHistorik(getType());
+            fad.nulstilFad();
+        }
     }
-
+    public String getType() {
+        String type = "";
+        if (fade.size() == 1) {
+            type = "Single Cask";
+        }
+        if (fade.size() > 1) {
+            type = "Single Malt";
+        }
+        return type;
+    }
     public void setLagringsDato(LocalDate lagringsDato) {
         if (this.lagringsDato == null) {
             this.lagringsDato = lagringsDato;
@@ -126,11 +134,13 @@ public class WhiskyBatch {
             }
         }
         updateModningsTid();
-
     }
-
     public LocalDate getLagringsDato() {
       return this.lagringsDato;
+    }
+
+    public ArrayList<String> getFadHistorierList() {
+        return new ArrayList<>(fadHistorierList);
     }
 
     public String getHistorie() {
@@ -156,12 +166,9 @@ public class WhiskyBatch {
 
 
     }
-
     @Override
     public String toString() {
         return "Batch ID: " + batchID;
     }
-
-
 }
 

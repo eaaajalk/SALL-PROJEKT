@@ -217,7 +217,7 @@ public class Controller {
      * Get alle maltBatch
      */
     public  ArrayList<WhiskyBatch> getWhiskyBatches() {
-        return storage.getWhiskies();
+        return storage.getWhiskieBatches();
     }
 
     // -------------------------------------------------------------------------
@@ -260,14 +260,14 @@ public class Controller {
                 "begravet dal under destilleriet", batch2,"002",32);
 
         Påfyldning p1 = d1.createPåfyldning(50, f1, m1, d1,
-                LocalDate.of(2023, 3, 12));
+                LocalDate.of(2023, 3, 30));
         Påfyldning p2 = d2.createPåfyldning(40, f2, m2, d2,
-                LocalDate.of(2023, 3, 12));
+                LocalDate.of(2023, 3, 30));
 
         Omhældning o1 = f1.createOmhældning(20, (LocalDate.of(2023, 3,31)), f2);
 
         WhiskyBatch w1 = controller.createWhiskyBatch("1", 10, 48,
-                "Første release", LocalDate.of(2026, 5, 31), 50, f2);
+                "Første release", LocalDate.of(2026, 5, 31), 60, f2);
 
         w1.tapPåFlasker(100, LocalDate.now(), 85, 0.7);
 

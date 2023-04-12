@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class PåfyldWindow extends Stage {
     Controller controller;
@@ -84,8 +85,16 @@ public class PåfyldWindow extends Stage {
         pane.add(lvwFade, 0, 2);
         lvwFade.setPrefWidth(500);
         lvwFade.setMaxHeight(450);
-        lvwFade.getItems().setAll(controller.getFade());
 
+        ArrayList<Fad> nullFade = new ArrayList<>();
+        for (int i = 0; i < controller.getFade().size(); i++) {
+            Fad f1 = controller.getFade().get(i);
+            if (f1.getIndholdsMængde() >= f1.getStr()) {
+                nullFade.add(f1);
+            }
+        }
+        lvwFade.getItems().setAll(controller.getFade());
+        lvwFade.getItems().removeAll(nullFade);
 
         ChangeListener<Fad> listener = (ov, oldFad, newFad) -> this.selectedFadChanged();
         lvwFade.getSelectionModel().selectedItemProperty().addListener(listener);

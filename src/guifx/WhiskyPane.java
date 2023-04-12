@@ -75,11 +75,11 @@ public class WhiskyPane extends GridPane {
         lblID2.setId("Overskrift3");
         Label lblFortynding = new Label("Fortynding(L):");
         lblFortynding.setId("Overskrift3");
-        Label lblModning = new Label("Modningstid:");
+        Label lblModning = new Label("Modningstid(År):");
         lblModning.setId("Overskrift3");
         Label lblBatchDato = new Label("Batch dato:");
         lblBatchDato.setId("Overskrift3");
-        Label lblBatchMængde = new Label("BatchMængde(L):");
+        Label lblBatchMængde = new Label("Rest mængde(L):");
         lblBatchMængde.setId("Overskrift3");
         Label lblBeskrivelse = new Label("Kommentar:");
         lblBeskrivelse.setId("Overskrift3");
@@ -189,8 +189,8 @@ public class WhiskyPane extends GridPane {
             expContent.add(lblFad, 0, 6);
 
             ArrayList<Fad> fade = new ArrayList<>(whiskyBatch.getFade().keySet());
-            for (int i = 0; i < whiskyBatch.getFade().size(); i++) {
-                Label lblFadi = new Label(fade.get(i).getHistorie());
+            for (int i = 0; i < whiskyBatch.getFadHistorierList().size(); i++) {
+                Label lblFadi = new Label(whiskyBatch.getFadHistorierList().get(i));
                 lblFadi.setPadding(new Insets(10, 20, 0, 0));
                 expContent.add(lblFadi, i, 7);
                 lblFadi.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
@@ -205,14 +205,13 @@ public class WhiskyPane extends GridPane {
             lblDestillat.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
             expContent.add(lblDestillat, 0, 9);
 
-            for (Fad fad : fade) {
-                for (int j = 0; j < fad.getPåfyldninger().size(); j++) {
-                    Label lblDestillati = new Label(fad.getPåfyldninger().get(j).getDestillat().getHistorie());
+                for (int j = 0; j < whiskyBatch.getDestillatHistorierList().size(); j++) {
+                    Label lblDestillati = new Label(whiskyBatch.getDestillatHistorierList().get(j));
                     lblDestillati.setPadding(new Insets(10, 20, 0, 0));
                     expContent.add(lblDestillati, j, 10);
                     lblDestillati.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
                 }
-            }
+
 
             Separator separator3 = new Separator(Orientation.HORIZONTAL);
             separator3.setPadding(new Insets(20, 0, 20, 0));

@@ -11,7 +11,7 @@ public class Storage {
     private ArrayList<Destillat> destillater;
     private ArrayList<MaltBatch> maltBatches;
     private ArrayList<Medarbejder> medarbejdere;
-    private ArrayList<WhiskyBatch> whiskies;
+    private ArrayList<WhiskyBatch> whiskyBatches;
 
     private Storage () {
         lagere = new ArrayList<>();
@@ -19,7 +19,7 @@ public class Storage {
         destillater = new ArrayList<>();
         maltBatches = new ArrayList<>();
         medarbejdere = new ArrayList<>();
-        whiskies = new ArrayList<>();
+        whiskyBatches = new ArrayList<>();
     }
     public static Storage getStorage() {
         if (storage == null){
@@ -96,16 +96,16 @@ public class Storage {
     }
     // -------------------------------------------------------------------------
 
-    public ArrayList<WhiskyBatch> getWhiskies() {
-        return new ArrayList<WhiskyBatch>(whiskies);
+    public ArrayList<WhiskyBatch> getWhiskieBatches() {
+        return new ArrayList<WhiskyBatch>(whiskyBatches);
     }
 
     public void addWhiskyBatch(WhiskyBatch whiskyBatch) {
-        whiskies.add(whiskyBatch);
+        whiskyBatches.add(whiskyBatch);
     }
 
     public void removeWhisky(WhiskyBatch whiskyBatch) {
-        whiskies.remove(whiskyBatch);
+        whiskyBatches.remove(whiskyBatch);
     }
     // -------------------------------------------------------------------------
 

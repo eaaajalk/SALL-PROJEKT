@@ -23,8 +23,6 @@ public class MaltBatch {
         return tørv;
     }
 
-
-
     @Override
     public String toString(){
         return batchNr;

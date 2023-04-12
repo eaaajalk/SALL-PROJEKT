@@ -13,18 +13,15 @@ public class Lager {
         this.navn = navn;
         this.adresse = adresse;
     }
-
     public ArrayList<Hylde> getHylder (){
         return new ArrayList<>(hylder);
     }
-
     public Hylde createHylde(int hyldeNr, Lager lager, int antalHyldePladser) {
         Hylde hylde = new Hylde(hyldeNr, lager, antalHyldePladser);
         hylder.add(hylde);
         brugteHyldeNumre.add(hyldeNr);
         return hylde;
     }
-
     public void addHylde(Hylde hylde) {
         if (!hylder.contains(hylde)) {
         hylder.add(hylde);
