@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class FadPane extends GridPane {
     private ListView<Fad> lvwFade;
-    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, fadHistorik, txfGangeBrugt;
+    private TextField txfID, txfStr, txfLager, txfHylde, txfKommentar, txfLagerDato, fadHistorik;
     private TextArea txaDestillater;
     private Fad fad;
     private ComboBox<Object> comboBox;
@@ -92,8 +92,6 @@ public class FadPane extends GridPane {
 
         Label lblID2 = new Label("ID:");
         lblID2.setId("Overskrift3");
-        Label lblAntalBrugt = new Label("Antal gange brugt:");
-        lblAntalBrugt.setId("Overskrift3");
         Label lblStr = new Label("Str (L):");
         lblStr.setId("Overskrift3");
         Label lblLager2 = new Label("Lager:");
@@ -110,13 +108,11 @@ public class FadPane extends GridPane {
         lblDestillat.setId("Overskrift3");
 
         VBox vBox = new VBox(25);
-        vBox.getChildren().addAll(lblID2,lblAntalBrugt, lblStr, lblLager2,lblHylde2,lblDato,lblKommentar,lblHistorik, lblDestillat);
+        vBox.getChildren().addAll(lblID2, lblStr, lblLager2,lblHylde2,lblDato,lblKommentar,lblHistorik, lblDestillat);
         this.add(vBox, 3, 4);
 
         txfID = new TextField();
         txfID.setEditable(false);
-        txfGangeBrugt = new TextField();
-        txfGangeBrugt.setEditable(false);
         txfStr = new TextField();
         txfLager = new TextField();
         txfHylde = new TextField();
@@ -127,7 +123,7 @@ public class FadPane extends GridPane {
 
 
         VBox vBox1 = new VBox(16);
-        vBox1.getChildren().addAll(txfID,txfGangeBrugt,txfStr,txfLager,txfHylde,txfLagerDato,txfKommentar, fadHistorik, txaDestillater);
+        vBox1.getChildren().addAll(txfID,txfStr,txfLager,txfHylde,txfLagerDato,txfKommentar, fadHistorik, txaDestillater);
         this.add(vBox1, 4, 4);
 
 
@@ -150,7 +146,6 @@ public class FadPane extends GridPane {
         HBox hBoxBtn = new HBox(50);
         hBoxBtn.getChildren().addAll(btnOpret, btnSlet, btnPlacer, btnOmhæld);
         this.add(hBoxBtn, 0, 5);
-
     }
 
     private void omhældAction() {
@@ -234,7 +229,6 @@ public class FadPane extends GridPane {
             txfID.setText(String.valueOf(fad.getID()));
             txfStr.setText(String.valueOf(fad.getStr()));
             txfKommentar.setText(fad.getKommentar());
-            txfGangeBrugt.setText(String.valueOf(fad.getAntalGangeBrugt()));
             if (fad.getHylde() != null) {
                 txfLager.setText(String.valueOf(fad.getHylde().getLager()));
                 txfHylde.setText(fad.getHylde().toString());

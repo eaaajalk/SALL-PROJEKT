@@ -64,7 +64,6 @@ public class StartWindow extends Application {
         tabDestillat.setContent(destillatPane);
         tabDestillat.setOnSelectionChanged(event -> destillatPane.updateControls());
 
-
         Tab tabWhisky = new Tab("Whisky");
         tabPane.getTabs().add(tabWhisky);
 

@@ -114,8 +114,6 @@ public class OpretDestillatWindow extends Stage {
     }
 
     private void okAction() {
-
-
         String id = txfID1.getText().trim();
         if (id.length() == 0) {
             lblError.setText("ID er ikke udfyldt");
@@ -133,8 +131,8 @@ public class OpretDestillatWindow extends Stage {
             lblError.setText("Angiv mængde (L)");
         }
         int procent = Integer.parseInt(txfAlkoholProcent.getText().trim());
-        if (procent < 1) {
-            lblError.setText("Angiv aloholprocent");
+        if (procent < 1 || procent > 100) {
+            lblError.setText("Angiv aloholprocent mellem 1 og 100");
         }
         MaltBatch maltBatch1 = comboBox.getValue();
         if (maltBatch1 == null) {

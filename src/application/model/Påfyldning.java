@@ -33,7 +33,6 @@ public class Påfyldning {
     public LocalDate getPåfyldningsDato() {
         return påfyldningsDato;
     }
-
     public Fad getFad() {
         return fad;
     }
