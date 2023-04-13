@@ -19,11 +19,6 @@ public class Hylde {
     /**
      * Opretter automatisk et HashMap der holder styr på hvor mange pladser der er på en hylde. <br />
      */
-    public void opretPladser(int antalPladser){
-        for (int i = 1; i <= antalPladser; i++) {
-            fade.put(i, null);
-        }
-    }
     public int getHyldeNr() {
         return hyldeNr;
     }
@@ -46,6 +41,11 @@ public class Hylde {
     /**
      * Tilføjer et fad til en plads på hylden. <br />
      */
+    public void opretPladser(int antalPladser){
+        for (int i = 1; i <= antalPladser; i++) {
+            fade.put(i, null);
+        }
+    }
     public void addFad(Fad fad, int Plads) {
         if (fade.size() >= Plads && Plads > 0) {
             if (!fade.containsValue(fad)) {

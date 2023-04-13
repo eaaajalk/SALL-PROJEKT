@@ -1,10 +1,7 @@
 package application.model;
 
-import application.controller.Controller;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.concurrent.ForkJoinPool;
 
 public class Destillat {
     private LocalDate startDato;
@@ -36,7 +33,6 @@ public class Destillat {
         if (mængde <= 0) { throw new IllegalArgumentException("Mængde må ikke være 0 eller mindre");}
         if (Integer.parseInt(ID) <= 0) { throw new IllegalArgumentException("ID må ikke være negativ");}
         if (alkoholProcent < 0 || alkoholProcent > 100) { throw new IllegalArgumentException("Alkoholprocenten skal være mellem 0 til 100");}
-
         this.startDato = startDato;
         this.slutDato = slutDato;
         this.mængde = mængde;
@@ -120,7 +116,7 @@ public class Destillat {
         this.mængde = mængde;
     }
 
-    public String getHistorie() {
+    public String getInformation() {
         StringBuilder sb = new StringBuilder();
         String id = "ID: " + getID();
         String mængde = "Mængde: " + getMængde();

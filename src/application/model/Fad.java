@@ -16,7 +16,6 @@ public class Fad {
     private LocalDate lagringsDato; // Den seneste dato der blev fyldt noget på fadet.
     private double modningsTid; // Den tid fadet har ligget i År.
     private static int countID = 1;
-    private int antalGangeBrugt; // Antal gange fadet er blevet brugt.
 
     public Fad(String fadHistorik, int str, String kommentar) {
         this.ID = countID;
@@ -25,7 +24,6 @@ public class Fad {
         this.str = str;
         this.kommentar = kommentar;
         this.lagringsDato = null;
-        this.antalGangeBrugt = 0;
     }
     /**
      * Opretter et Omhældnings-objekt som komposition af dette fad. <br />
@@ -35,9 +33,11 @@ public class Fad {
      * @param tilFad != null
      * @return Omhældning
      */
-    public Omhældning createOmhældning (int mængde, LocalDate omhældningsDato, Fad tilFad){
+    public Omhældning createOmhældning (Fad fraFad, int mængde, LocalDate omhældningsDato, Fad tilFad){
         if (mængde > getIndholdsMængde()) {
             throw new RuntimeException("Du kan ikke omhælde mere end fadet indeholder");
+        } if (mængde > tilFad.getIndholdsMængde()) {
+            throw new RuntimeException("Der er ikke plads til så mange L i fadet");
         }
         Omhældning omhældning = new Omhældning(this, mængde, omhældningsDato, tilFad);
         tilFad.addOmhældning(omhældning);
@@ -68,9 +68,6 @@ public class Fad {
     }
     public Hylde getHylde() {
         return hylde;
-    }
-    public int getAntalGangeBrugt() {
-        return antalGangeBrugt;
     }
     public String getKommentar() {
         return kommentar;
@@ -172,7 +169,7 @@ public class Fad {
      * Nulstiller fadet, så det kan lagres på ny <br />
      */
     public void nulstilFad() {
-        this.antalGangeBrugt++;
+
         setIndholdsMængde(0);
         påfyldninger.clear();
         omhældninger.clear();
@@ -189,7 +186,7 @@ public class Fad {
     public String getIndholdMængdeToString(){
         return "" + getIndholdsMængde() + "/" + str + "L";
     }
-    public String getHistorie() {
+    public String getInformation() {
         StringBuilder sb = new StringBuilder();
         StringBuilder sbPå = new StringBuilder();
         StringBuilder sbOm = new StringBuilder();
@@ -212,8 +209,8 @@ public class Fad {
 
     public String toString() {
         if (getHylde() == null) {
-            return getID() + "                    " + getIndholdMængdeToString() + "       " +
-                    "                              " + "Ikke placeret" + "                                         ";
+            return getID() + "           " + getIndholdMængdeToString() + "       " +
+                    "          " + "Ikke placeret" + "                                         ";
         } else {
             return getID() +"           " + getIndholdMængdeToString() +"                     " + getModningsTid()+  "                  " +
                     "     " + getHylde().getLager().toString() + " (H" + getHylde().getHyldeNr() + ", P" + getFadPlads() + ")" ;

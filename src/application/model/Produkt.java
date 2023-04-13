@@ -11,7 +11,7 @@ public class Produkt {
     private int unikID;
     private double flaskeStr; //flaske søtrrelse i L
     private static int idCount = 1;
-    public Produkt(int nr, WhiskyBatch whiskyBatch, int pris, LocalDate tapningsDato, double flaskeStr) {
+    Produkt(int nr, WhiskyBatch whiskyBatch, int pris, LocalDate tapningsDato, double flaskeStr) {
         this.nr = nr;
         this.whiskyBatch = whiskyBatch;
         this.pris = pris;
@@ -19,9 +19,7 @@ public class Produkt {
         this.unikID = idCount;
         this.flaskeStr = flaskeStr;
         idCount++;
-
     }
-
     public int getNr() {
         return nr;
     }
@@ -48,14 +46,16 @@ public class Produkt {
 
     public String produktHistorie() {
         StringBuilder sb = new StringBuilder();
-
         String id = "ID: " + getUnikID();
         String nr = "Nr: " + getNr() + "/" + whiskyBatch.getProdukter().size();
-        String dato = "Tapningsdato: " + getTapningsDato();
         String alkohol = "Alkoholprocent: " + whiskyBatch.getAlkoholProcent();
+        String dato = "Tapningsdato: " + getTapningsDato();
         String type = "Type: " + whiskyBatch.getType();
+        String Batch = "BatchID: " + getWhiskyBatch().getBatchID();
+        String modn = "Modningstid: " + getWhiskyBatch().getModningstid();
 
-        sb.append(id).append("\n").append(nr).append("\n").append(dato).append("\n").append(alkohol).append("\n").append(type);
+        sb.append("\n").append(id).append("\n").append(nr).append("\n").append(dato).append("\n").append(alkohol).
+                append("\n").append(type).append("\n").append(Batch).append("\n").append(modn);
 
         return String.valueOf(sb);
     }

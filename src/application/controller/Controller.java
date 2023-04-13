@@ -12,14 +12,12 @@ public class Controller {
     private Controller() {
         storage = Storage.getStorage();
     }
-    
     public static Controller getController() {
         if (controller == null) {
             controller = new Controller();
         }
         return controller;
     }
-
     public static Controller getTestController() {
         return new Controller();
     }
@@ -94,9 +92,15 @@ public class Controller {
     public ArrayList<Fad> getFade() {
         return storage.getFade();
     }
+
+    public Omhældning createOmhældning (Fad fraFad, int mængde, LocalDate omhældningsDato, Fad tilFad) {
+        Omhældning omhældning = fraFad.createOmhældning(fraFad, mængde, omhældningsDato, tilFad);
+        return omhældning;
+    }
     // -------------------------------------------------------------------------
     /**
      * Placerer et fad på en hylde og en plads
+     *
      */
     public void placerFad(Hylde hylde, int plads, Fad fad){
         if (fad == null || hylde == null) {
@@ -145,6 +149,10 @@ public class Controller {
      */
     public ArrayList<Destillat> getDestillater() {
         return storage.getDestillater();
+    }
+    public Påfyldning createPåfyldning(int mængde, Fad fad, Medarbejder medarbejder, Destillat destillat, LocalDate påfyldningsDato) {
+        Påfyldning påfyldning = destillat.createPåfyldning(mængde, fad, medarbejder, destillat, påfyldningsDato);
+        return påfyldning;
     }
     // -------------------------------------------------------------------------
 
@@ -220,6 +228,17 @@ public class Controller {
         return storage.getWhiskieBatches();
     }
 
+    public void tapPåFlasker(int pris, LocalDate tapningsDato, int antalFlasker, double flaskeStr, WhiskyBatch whiskyBatch) {
+        if (flaskeStr * antalFlasker > whiskyBatch.getBatchMængde()) {
+            throw new RuntimeException("Du har ikke nok whisky til at tappe så mange flasker");
+        }
+        for (int i = 1; i < antalFlasker; i++) {
+            whiskyBatch.createProdukt(i, pris, tapningsDato, flaskeStr);
+        }
+        int tapningsMængde = (int) (antalFlasker * flaskeStr);
+        whiskyBatch.setBatchMængde(whiskyBatch.getBatchMængde() - tapningsMængde);
+    }
+
     // -------------------------------------------------------------------------
 
     // SAVE AND LOAD STORAGE HER
@@ -259,40 +278,23 @@ public class Controller {
                 LocalDate.of(2023, 2, 21), 80, m2, null,
                 "begravet dal under destilleriet", batch2,"002",32);
 
-        Påfyldning p1 = d1.createPåfyldning(50, f1, m1, d1,
+        Påfyldning p1 = controller.createPåfyldning(50, f1, m1, d1,
                 LocalDate.of(2023, 3, 30));
-        Påfyldning p2 = d2.createPåfyldning(40, f2, m2, d2,
+        Påfyldning p2 = controller.createPåfyldning(40, f2, m2, d2,
                 LocalDate.of(2023, 3, 30));
 
-        Omhældning o1 = f1.createOmhældning(20, (LocalDate.of(2023, 3,31)), f2);
+        Omhældning o1 = controller.createOmhældning(f1,20, (LocalDate.of(2023, 3,31)), f2);
 
         WhiskyBatch w1 = controller.createWhiskyBatch("1", 10, 48,
                 "Første release", LocalDate.of(2026, 5, 31), 60, f2);
 
-        w1.tapPåFlasker(100, LocalDate.now(), 85, 0.7);
+        controller.tapPåFlasker(100, LocalDate.now(), 85, 0.7, w1);
 
     }
         public void init() {
             initStorage();
         }
 
-    public static void main(String[] args) {
-
-
-
-        Fad f1 = new Fad("Bourbon", 250, null);
-        Fad f2 = new Fad("Bourbon", 250, null);
-        Fad f3 = new Fad("Bourbon", 250, null);
-        Fad f4 = new Fad("Bourbon", 250, null);
-        f1.addFadHistorik("Rødvin");
-
-
-        System.out.println(f1.getID());
-        System.out.println(f2.getID());
-        System.out.println(f3.getID());
-        System.out.println(f4.getID());
-//        System.out.println(f1.getCountID());
-    }
 
     }
 

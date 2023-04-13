@@ -12,39 +12,31 @@ public class WhiskyBatch {
     private int alkoholProcent;
     private Map<Fad, Integer> fade = new HashMap<>();
     private int modningsTid;
-    private String beskrivelse;
+    private String kommentar;
     private LocalDate batchDato;
     private ArrayList<Produkt> produkter = new ArrayList<Produkt>();
     private double batchMængde;
     private LocalDate lagringsDato;
-    private ArrayList<String> fadHistorierList = new ArrayList<>(); // Gemmer fadenes historie
-    private ArrayList<String> destillatHistorierList = new ArrayList<>(); // Gemmer fadenes destillat-historier.
+    private ArrayList<String> fadInfoList = new ArrayList<>(); // Gemmer fadenes historie
+    private ArrayList<String> destillatFraPåfyldningerList = new ArrayList<>(); // Gemmer fadenes destillat-historier.
+    private ArrayList<String> omældningsFadInfoList = new ArrayList<>(); // Gemmer fadenes omældnings-fade.
+    private ArrayList<String> destialletFraOmhældningerList = new ArrayList<>(); // Gemmer omhældnings-fadenes destillat-indhold.
 
-    public WhiskyBatch(String batchID, int fortyndningsMængde, int alkoholProcent, String beskrivelse, LocalDate batchDato, int fadMængde, Fad fad) {
+    public WhiskyBatch(String batchID, int fortyndningsMængde, int alkoholProcent, String kommentar, LocalDate batchDato, int fadMængde, Fad fad) {
         this.batchID = batchID;
         this.fortyndningsMængde = fortyndningsMængde;
         this.alkoholProcent = alkoholProcent;
-        this.beskrivelse = beskrivelse;
+        this.kommentar = kommentar;
         this.batchDato = batchDato;
         this.batchMængde = fortyndningsMængde;
         this.lagringsDato = null;
         addFad(fad, fadMængde);
     }
 
-    public Produkt createFlaske(int nr, int pris, LocalDate tapningsDato, double flaskeStr) {
+    public Produkt createProdukt(int nr, int pris, LocalDate tapningsDato, double flaskeStr) {
         Produkt produkt = new Produkt(nr, this, pris, tapningsDato, flaskeStr);
         produkter.add(produkt);
         return produkt;
-    }
-    public void tapPåFlasker(int pris, LocalDate tapningsDato, int antalFlasker, double flaskeStr) {
-        if (flaskeStr * antalFlasker > batchMængde) {
-            throw new RuntimeException("Du har ikke nok whisky til at tappe så mange flasker");
-        }
-        for (int i = 1; i < antalFlasker; i++) {
-            createFlaske(i, pris, tapningsDato, flaskeStr);
-        }
-        int tapningsMængde = (int) (antalFlasker * flaskeStr);
-        setBatchMængde(getBatchMængde() - tapningsMængde);
     }
     public void setBatchMængde(double batchMængde) {
         this.batchMængde = batchMængde;
@@ -74,8 +66,8 @@ public class WhiskyBatch {
     public HashMap<Fad, Integer> getFade() {
         return new HashMap<>(fade);
     }
-    public String getBeskrivelse() {
-        return beskrivelse;
+    public String getKommentar() {
+        return kommentar;
     }
     public ArrayList<Produkt> getProdukter() {
         return produkter;
@@ -98,14 +90,32 @@ public class WhiskyBatch {
         updateMængde(mængde, fad);
     }
     public void addHistorier(Fad fad) {
-        fadHistorierList.add(fad.getHistorie());
+
+        // Tilføjer fadets historie:
+        fadInfoList.add(fad.getInformation());
+
+        // Tilføjer fadets destillat-historie fra påfyldninger:
         for (int i = 0; i < fad.getPåfyldninger().size(); i++) {
-            String destillatHistorie = fad.getPåfyldninger().get(i).getDestillat().getHistorie();
-            destillatHistorierList.add(destillatHistorie);
+            String påfyldningsInformation = fad.getPåfyldninger().get(i).getDestillat().getInformation();
+            destillatFraPåfyldningerList.add(påfyldningsInformation);
+        }
+
+        // Tilføjer hvilke fade, som dette fad, har fået omhældninger fra og deres historie:
+        for (int i = 0; i < fad.getOmhældninger().size(); i++) {
+            String omhældningsFade = fad.getOmhældninger().get(i).getFraFad().getInformation();
+            omældningsFadInfoList.add(omhældningsFade);
+
+            Fad fad1 = fad.getOmhældninger().get(i).getFraFad();
+
+            //Tilføjer fadets destillater og deres historier:
+            for (int j = 0; j < fad1.getPåfyldninger().size(); j++) {
+                String destillatFraOmhældning = fad1.getPåfyldninger().get(i).getDestillat().getInformation();
+                destialletFraOmhældningerList.add(destillatFraOmhældning);
+            }
         }
     }
-    public ArrayList<String> getDestillatHistorierList() {
-        return new ArrayList<>(destillatHistorierList);
+    public ArrayList<String> getDestillatFraPåfyldningerList() {
+        return new ArrayList<>(destillatFraPåfyldningerList);
     }
     private void updateMængde(int mængde, Fad fad) {
         this.batchMængde += mængde;
@@ -139,11 +149,19 @@ public class WhiskyBatch {
       return this.lagringsDato;
     }
 
-    public ArrayList<String> getFadHistorierList() {
-        return new ArrayList<>(fadHistorierList);
+    public ArrayList<String> getFadInfoList() {
+        return new ArrayList<>(fadInfoList);
     }
 
-    public String getHistorie() {
+    public ArrayList<String> getOmældningsFadInfoList() {
+        return new ArrayList<>(omældningsFadInfoList);
+    }
+
+    public ArrayList<String> getDestialletFraOmhældningerList() {
+        return new ArrayList<>(destialletFraOmhældningerList);
+    }
+
+    public String getInformation() {
         StringBuilder sb = new StringBuilder();
         StringBuilder sb1 = new StringBuilder();
 
@@ -151,7 +169,7 @@ public class WhiskyBatch {
         String modning = "Modningstid: " + getModningstid() + " år";
         String date = "Lavet den: " + getBatchDato();
         String fortynding = "Fortyndingsmængde: " + getFortyndningsMængde();
-        String beskrivelse = "Kommentar: " + getBeskrivelse();
+        String beskrivelse = "Kommentar: " + getKommentar();
         String fade = "Lavet af følgende fad(e):";
         ArrayList<Fad> keySet = new ArrayList<>(getFade().keySet());
         for (int i = 0; i < getFade().size(); i++) {

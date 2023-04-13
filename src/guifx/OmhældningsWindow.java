@@ -18,23 +18,17 @@ import javafx.stage.StageStyle;
 import java.time.LocalDate;
 
 public class OmhældningsWindow extends Stage {
-
     private Fad fraFad, tilFad;
-
     Controller controller;
     public OmhældningsWindow(String title, Fad fad) {
         controller = Controller.getController();
-
         this.fraFad = fad;
-
         this.initStyle(StageStyle.UTILITY);
         this.initModality(Modality.APPLICATION_MODAL);
         this.setResizable(false);
-
         this.setTitle(title);
         GridPane pane = new GridPane();
         this.initContent(pane);
-
         Scene scene = new Scene(pane);
         this.setScene(scene);
         scene.getStylesheets().add("application/style.css");
@@ -84,7 +78,6 @@ public class OmhældningsWindow extends Stage {
         lvwFade.getItems().remove(fraFad);
 
 
-
         ChangeListener<Fad> listener = (ov, oldFad, newFad) -> this.selectedFadChanged();
         lvwFade.getSelectionModel().selectedItemProperty().addListener(listener);
         this.initControls();
@@ -128,7 +121,7 @@ public class OmhældningsWindow extends Stage {
         }
 
         if (mængde > tilFad.getResterendePlads()){
-            lblError.setText("Det er fucking ikke plads til alt det whisky i det valgte fad");
+            lblError.setText("Det er ikke plads til alt det whisky i det valgte fad");
         }
 
         if (mængde < 1) {
@@ -136,11 +129,11 @@ public class OmhældningsWindow extends Stage {
         }
         LocalDate dato = datePicker.getValue();
         if (dato == null) {
-            lblError.setText("Vælg nu forhelvede en dato");
+            lblError.setText("Vælg en dato");
 
         }
         // Call controller methods
-        fraFad.createOmhældning(mængde, dato, tilFad);
+        controller.createOmhældning(fraFad, mængde, dato, tilFad);
         this.hide();
 
     }

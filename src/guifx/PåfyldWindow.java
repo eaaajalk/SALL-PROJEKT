@@ -161,8 +161,10 @@ public class PåfyldWindow extends Stage {
                 lblError.setText("Vælg medarbejder");
             }  if (mængde > (fad.getStr() - fad.getIndholdsMængde())) {
                     lblError.setText("Der er ikke nok plads i fadet");
-                }
-                destillat.createPåfyldning(mængde, fad, medarbejder, destillat, dato);
+            } if (dato.isAfter(destillat.getSlutDato())) {
+                lblError.setText("Påfyldningsdatoen må ikke fremkomme før destillatets slutdato");
+            }
+                controller.createPåfyldning(mængde, fad, medarbejder, destillat, dato);
                 this.hide();
 
     }
