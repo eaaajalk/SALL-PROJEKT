@@ -16,6 +16,7 @@ public class Fad {
     private LocalDate lagringsDato; // Den seneste dato der blev fyldt noget på fadet.
     private double modningsTid; // Den tid fadet har ligget i År.
     private static int countID = 1;
+    private ArrayList<String> fadHistorie = new ArrayList<>(); // Gemmer fadets historie
 
     public Fad(String fadHistorik, int str, String kommentar) {
         this.ID = countID;
@@ -36,7 +37,7 @@ public class Fad {
     public Omhældning createOmhældning (Fad fraFad, int mængde, LocalDate omhældningsDato, Fad tilFad){
         if (mængde > getIndholdsMængde()) {
             throw new RuntimeException("Du kan ikke omhælde mere end fadet indeholder");
-        } if (mængde > tilFad.getIndholdsMængde()) {
+        } if (mængde > tilFad.getResterendePlads()) {
             throw new RuntimeException("Der er ikke plads til så mange L i fadet");
         }
         Omhældning omhældning = new Omhældning(this, mængde, omhældningsDato, tilFad);
@@ -124,6 +125,7 @@ public class Fad {
     public void addOmhældning(Omhældning omhældning) {
         if (!omhældninger.contains(omhældning)) {
             omhældninger.add(omhældning);
+            addHistorie(omhældning);
             updateLagringsDato(omhældning.getFraFad().lagringsDato);
         }
     }
@@ -169,13 +171,14 @@ public class Fad {
      * Nulstiller fadet, så det kan lagres på ny <br />
      */
     public void nulstilFad() {
-
         setIndholdsMængde(0);
         påfyldninger.clear();
         omhældninger.clear();
         setKommentar(null);
         setLagringsDato(null);
         setModningsTid(0);
+        fadHistorie.clear();
+
     }
     /**
      * Tilføjer en mængde til fadet. <br />
@@ -191,21 +194,70 @@ public class Fad {
         StringBuilder sbPå = new StringBuilder();
         StringBuilder sbOm = new StringBuilder();
         String id = "ID: " + getID();
-        String fadstr = "Fad str: " + getStr();
         String påfyld = "Påfyldninger:";
         for (int i = 0; i < getPåfyldninger().size(); i++) {
-            sbPå.append("Destillat ID: ").append(getPåfyldninger().get(i).getDestillat().getID()).
+            Destillat destillat = getPåfyldninger().get(i).getDestillat();
+
+            String alkohol = "Alkoholprocent: " + destillat.getAlkoholProcent();
+            String vand = "Vandtype: " + destillat.getVandType();
+            String maltBatch = "Maltbatch nr: " + destillat.getMaltBatch().getBatchNr();
+            String tørv = "Tørv: " + destillat.getMaltBatch().getTørv();
+            String kornSort = "Kornsort: " + destillat.getMaltBatch().getKornSort();
+
+            sbPå.append("Destillat ID: ").append(destillat.getID()).
                     append(" | Mængde: ").append(getPåfyldninger().get(i).getMængde()).append("L | Dato: ").
-                    append(getPåfyldninger().get(i).getPåfyldningsDato()).append("\n");
+                    append(getPåfyldninger().get(i).getPåfyldningsDato()).append("\n").append("Destillat info:").append("\n").
+                    append(alkohol).append("\n").append(vand).append("\n").append(maltBatch).append("\n").append(tørv).append("\n")
+                    .append(kornSort).append("\n");
+
         } String omhæld = "Omhældninger:";
         for (int i = 0; i < getOmhældninger().size(); i++) {
             sbOm.append("Omhældt ").append(getOmhældninger().get(i).getMængde()).append("L fra Fad ID: ").
                     append(getOmhældninger().get(i).getFraFad().getID()).append(" | Dato: ").append(getOmhældninger().get(i).getOmhældningsDato()).append("\n");
         } String modning = "Modningstid: " + getModningsTid();
-        sb.append(id).append("\n").append(fadstr).append("\n").append(modning).append(" år\n").append("\n").append(påfyld)
-                .append("\n").append(sbPå.toString()).append("\n").append(omhæld).append("\n").append(sbOm.toString());
+        sb.append(id).append("\n").append(modning).append(" år\n").append("\n").append(påfyld)
+                .append("\n").append(sbPå).append("\n").append(omhæld).append("\n").append(sbOm).append("\n");
+
         return sb.toString();
     }
+
+    public void addHistorie(Omhældning omhældning) {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbPå = new StringBuilder();
+        StringBuilder sbOm = new StringBuilder();
+        Fad fad = omhældning.getFraFad();
+        String id = "Fad ID: " + fad.getID();
+        String påfyld = "Påfyldninger:";
+        for (int i = 0; i < fad.getPåfyldninger().size(); i++) {
+            Destillat destillat = fad.getPåfyldninger().get(i).getDestillat();
+
+            String alkohol = "Alkoholprocent: " + destillat.getAlkoholProcent();
+            String vand = "Vandtype: " + destillat.getVandType();
+            String maltBatch = "Maltbatch nr: " + destillat.getMaltBatch().getBatchNr();
+            String tørv = "Tørv: " + destillat.getMaltBatch().getTørv();
+            String kornSort = "Kornsort: " + destillat.getMaltBatch().getKornSort();
+
+            sbPå.append("Destillat ID: ").append(destillat.getID()).
+                    append(" | Mængde: ").append(fad.getPåfyldninger().get(i).getMængde()).append("L | Dato: ").
+                    append(fad.getPåfyldninger().get(i).getPåfyldningsDato()).append("\n").append("Destillat info:").append("\n").
+                    append(alkohol).append("\n").append(vand).append("\n").append(maltBatch).append("\n").append(tørv).append("\n")
+                    .append(kornSort).append("\n");
+        }
+        String omhæld = "Omhældninger:";
+        for (int i = 0; i < fad.getOmhældninger().size(); i++) {
+            sbOm.append("Omhældt ").append(fad.getOmhældninger().get(i).getMængde()).append("L fra Fad ID: ").
+                    append(fad.getOmhældninger().get(i).getFraFad().getID()).append(" | Dato: ").append(fad.getOmhældninger().get(i).getOmhældningsDato()).append("\n");
+        } String modning = "Modningstid: " + fad.getModningsTid();
+
+        sb.append(id).append("\n").append(modning).append(" år\n").append("\n").append(påfyld)
+                .append("\n").append(sbPå).append("\n").append(omhæld).append("\n").append(sbOm);
+
+        fadHistorie.add(sb.toString());
+    }
+    public ArrayList<String> getFadHistorie() {
+        return new ArrayList<>(fadHistorie);
+    }
+
 
     public String toString() {
         if (getHylde() == null) {
