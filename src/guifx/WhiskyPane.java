@@ -348,6 +348,7 @@ public class WhiskyPane extends GridPane {
     // -------------------------------------------------------------------------
 
     private void selectedBatchChanged() {
+        lvwBatches.refresh();
         whiskyBatch = lvwBatches.getSelectionModel().getSelectedItem();
         if (whiskyBatch != null) {
             txfID.setText(whiskyBatch.getBatchID());

@@ -16,6 +16,7 @@ public class Fad {
     private LocalDate lagringsDato; // Den seneste dato der blev fyldt noget på fadet.
     private double modningsTid; // Den tid fadet har ligget i År.
     private static int countID = 1;
+    private ArrayList<String> fadOmhældningsHistorie;
 
     public Fad(String fadHistorik, int str, String kommentar) {
         this.ID = countID;
@@ -36,7 +37,7 @@ public class Fad {
     public Omhældning createOmhældning (Fad fraFad, int mængde, LocalDate omhældningsDato, Fad tilFad){
         if (mængde > getIndholdsMængde()) {
             throw new RuntimeException("Du kan ikke omhælde mere end fadet indeholder");
-        } if (mængde > tilFad.getIndholdsMængde()) {
+        } if (mængde > tilFad.getResterendePlads()) {
             throw new RuntimeException("Der er ikke plads til så mange L i fadet");
         }
         Omhældning omhældning = new Omhældning(this, mængde, omhældningsDato, tilFad);
@@ -133,6 +134,7 @@ public class Fad {
     public void addPåfyldning(Påfyldning påfyldning) {
         if (!påfyldninger.contains(påfyldning)) {
             påfyldninger.add(påfyldning);
+
             updateLagringsDato(påfyldning.getPåfyldningsDato());
         }
     }
@@ -169,7 +171,6 @@ public class Fad {
      * Nulstiller fadet, så det kan lagres på ny <br />
      */
     public void nulstilFad() {
-
         setIndholdsMængde(0);
         påfyldninger.clear();
         omhældninger.clear();
@@ -186,6 +187,8 @@ public class Fad {
     public String getIndholdMængdeToString(){
         return "" + getIndholdsMængde() + "/" + str + "L";
     }
+
+
     public String getInformation() {
         StringBuilder sb = new StringBuilder();
         StringBuilder sbPå = new StringBuilder();
@@ -193,6 +196,7 @@ public class Fad {
         String id = "ID: " + getID();
         String fadstr = "Fad str: " + getStr();
         String påfyld = "Påfyldninger:";
+        String modning = "Modningstid: " + getModningsTid();
         for (int i = 0; i < getPåfyldninger().size(); i++) {
             sbPå.append("Destillat ID: ").append(getPåfyldninger().get(i).getDestillat().getID()).
                     append(" | Mængde: ").append(getPåfyldninger().get(i).getMængde()).append("L | Dato: ").
@@ -201,12 +205,12 @@ public class Fad {
         for (int i = 0; i < getOmhældninger().size(); i++) {
             sbOm.append("Omhældt ").append(getOmhældninger().get(i).getMængde()).append("L fra Fad ID: ").
                     append(getOmhældninger().get(i).getFraFad().getID()).append(" | Dato: ").append(getOmhældninger().get(i).getOmhældningsDato()).append("\n");
-        } String modning = "Modningstid: " + getModningsTid();
+        }
+
         sb.append(id).append("\n").append(fadstr).append("\n").append(modning).append(" år\n").append("\n").append(påfyld)
                 .append("\n").append(sbPå.toString()).append("\n").append(omhæld).append("\n").append(sbOm.toString());
         return sb.toString();
     }
-
     public String toString() {
         if (getHylde() == null) {
             return getID() + "           " + getIndholdMængdeToString() + "       " +

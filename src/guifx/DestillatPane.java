@@ -162,6 +162,7 @@ public class DestillatPane extends GridPane {
         this.updateControls();
     }
     public void updateControls() {
+        lvwDestillater.refresh();
         destillat = lvwDestillater.getSelectionModel().getSelectedItem();
         if (destillat != null) {
             txfID1.setText(destillat.getID());

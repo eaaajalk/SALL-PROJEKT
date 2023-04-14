@@ -25,15 +25,19 @@ public class Controller {
 
     /**
      * Opretter nyt lager.<br />
-     * Requires: 
+     * Requires:
+     * @param navn != null
+     * @param adresse != null
      */
     public Lager createLager(String navn, String adresse) {
         Lager lager = new Lager(navn, adresse);
         storage.addLager(lager);
         return lager;
     }
+
     /**
-     * Sletter lager<br />
+     * Sletter lager.<br />
+     * @param lager
      */
     public void deleteLager(Lager lager) {
         storage.removeLager(lager);
@@ -238,6 +242,8 @@ public class Controller {
         int tapningsMængde = (int) (antalFlasker * flaskeStr);
         whiskyBatch.setBatchMængde(whiskyBatch.getBatchMængde() - tapningsMængde);
     }
+
+
 
     // -------------------------------------------------------------------------
 

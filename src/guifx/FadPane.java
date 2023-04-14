@@ -224,6 +224,7 @@ public class FadPane extends GridPane {
     }
 
     public void updateControls() {
+        lvwFade.refresh();
         fad = lvwFade.getSelectionModel().getSelectedItem();
         if (fad != null) {
             txfID.setText(String.valueOf(fad.getID()));

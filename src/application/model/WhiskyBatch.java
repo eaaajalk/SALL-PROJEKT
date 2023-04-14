@@ -1,9 +1,11 @@
 package application.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WhiskyBatch {
@@ -45,7 +47,7 @@ public class WhiskyBatch {
         return (int) (batchMængde / flaskeStr);
     }
     public void updateModningsTid() {
-        long diff = ChronoUnit.YEARS.between(getLagringsDato(), batchDato);
+        long diff = ChronoUnit.YEARS.between(getLagringsDato(), LocalDate.now());
         this.modningsTid = (int) diff;
     }
     public int getModningstid() {
@@ -90,7 +92,6 @@ public class WhiskyBatch {
         updateMængde(mængde, fad);
     }
     public void addHistorier(Fad fad) {
-
         // Tilføjer fadets historie:
         fadInfoList.add(fad.getInformation());
 
@@ -99,7 +100,6 @@ public class WhiskyBatch {
             String påfyldningsInformation = fad.getPåfyldninger().get(i).getDestillat().getInformation();
             destillatFraPåfyldningerList.add(påfyldningsInformation);
         }
-
         // Tilføjer hvilke fade, som dette fad, har fået omhældninger fra og deres historie:
         for (int i = 0; i < fad.getOmhældninger().size(); i++) {
             String omhældningsFade = fad.getOmhældninger().get(i).getFraFad().getInformation();
@@ -148,7 +148,6 @@ public class WhiskyBatch {
     public LocalDate getLagringsDato() {
       return this.lagringsDato;
     }
-
     public ArrayList<String> getFadInfoList() {
         return new ArrayList<>(fadInfoList);
     }
