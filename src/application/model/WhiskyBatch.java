@@ -1,11 +1,11 @@
 package application.model;
 
+import com.sun.source.tree.NewArrayTree;
+
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class WhiskyBatch {
@@ -19,10 +19,8 @@ public class WhiskyBatch {
     private ArrayList<Produkt> produkter = new ArrayList<Produkt>();
     private double batchMængde;
     private LocalDate lagringsDato;
-    private ArrayList<String> fadInfoList = new ArrayList<>(); // Gemmer fadenes historie
-    private ArrayList<String> destillatFraPåfyldningerList = new ArrayList<>(); // Gemmer fadenes destillat-historier.
-    private ArrayList<String> omældningsFadInfoList = new ArrayList<>(); // Gemmer fadenes omældnings-fade.
-    private ArrayList<String> destialletFraOmhældningerList = new ArrayList<>(); // Gemmer omhældnings-fadenes destillat-indhold.
+    private Map<Fad, String> fadHistorie = new HashMap<>();
+    private Map<Fad, String> fadInfo = new HashMap<>();
 
     public WhiskyBatch(String batchID, int fortyndningsMængde, int alkoholProcent, String kommentar, LocalDate batchDato, int fadMængde, Fad fad) {
         this.batchID = batchID;
@@ -47,7 +45,7 @@ public class WhiskyBatch {
         return (int) (batchMængde / flaskeStr);
     }
     public void updateModningsTid() {
-        long diff = ChronoUnit.YEARS.between(getLagringsDato(), LocalDate.now());
+        long diff = ChronoUnit.YEARS.between(getLagringsDato(), batchDato);
         this.modningsTid = (int) diff;
     }
     public int getModningstid() {
@@ -88,35 +86,23 @@ public class WhiskyBatch {
                 fade.put(fad, m + mængde);
             }
         setLagringsDato(fad.getLagringsDato());
-        addHistorier(fad);
+        addFadHistorier(fad);
         updateMængde(mængde, fad);
     }
-    public void addHistorier(Fad fad) {
-        // Tilføjer fadets historie:
-        fadInfoList.add(fad.getInformation());
 
-        // Tilføjer fadets destillat-historie fra påfyldninger:
-        for (int i = 0; i < fad.getPåfyldninger().size(); i++) {
-            String påfyldningsInformation = fad.getPåfyldninger().get(i).getDestillat().getInformation();
-            destillatFraPåfyldningerList.add(påfyldningsInformation);
-        }
-        // Tilføjer hvilke fade, som dette fad, har fået omhældninger fra og deres historie:
-        for (int i = 0; i < fad.getOmhældninger().size(); i++) {
-            String omhældningsFade = fad.getOmhældninger().get(i).getFraFad().getInformation();
-            omældningsFadInfoList.add(omhældningsFade);
-
-            Fad fad1 = fad.getOmhældninger().get(i).getFraFad();
-
-            //Tilføjer fadets destillater og deres historier:
-            for (int j = 0; j < fad1.getPåfyldninger().size(); j++) {
-                String destillatFraOmhældning = fad1.getPåfyldninger().get(i).getDestillat().getInformation();
-                destialletFraOmhældningerList.add(destillatFraOmhældning);
-            }
-        }
+    public void addFadHistorier(Fad fad) {
+        fadHistorie.put(fad, String.valueOf(fad.getFadHistorie()));
+        fadInfo.put(fad, fad.getInformation());
     }
-    public ArrayList<String> getDestillatFraPåfyldningerList() {
-        return new ArrayList<>(destillatFraPåfyldningerList);
+
+    public Map<Fad, String> getFadHistorie() {
+        return fadHistorie;
     }
+
+    public Map<Fad, String> getFadInfo() {
+        return fadInfo;
+    }
+
     private void updateMængde(int mængde, Fad fad) {
         this.batchMængde += mængde;
         fad.setIndholdsMængde(fad.getIndholdsMængde()-mængde);
@@ -147,17 +133,6 @@ public class WhiskyBatch {
     }
     public LocalDate getLagringsDato() {
       return this.lagringsDato;
-    }
-    public ArrayList<String> getFadInfoList() {
-        return new ArrayList<>(fadInfoList);
-    }
-
-    public ArrayList<String> getOmældningsFadInfoList() {
-        return new ArrayList<>(omældningsFadInfoList);
-    }
-
-    public ArrayList<String> getDestialletFraOmhældningerList() {
-        return new ArrayList<>(destialletFraOmhældningerList);
     }
 
     public String getInformation() {

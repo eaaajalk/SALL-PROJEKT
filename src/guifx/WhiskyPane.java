@@ -200,7 +200,6 @@ public class WhiskyPane extends GridPane {
             expContent.setMaxWidth(Double.MAX_VALUE);
             scrollPane.setContent(expContent);
 
-
             Label lblFlaskeInfo = new Label("Flaske information:");
             lblFlaskeInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
             lblFlaskeInfo.setPadding(new Insets(0, 0, 10, 0));
@@ -232,71 +231,32 @@ public class WhiskyPane extends GridPane {
             lblFad.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
             expContent.add(lblFad, 0, 6);
 
-            ArrayList<Fad> fade = new ArrayList<>(whiskyBatch.getFade().keySet());
-            for (int i = 0; i < whiskyBatch.getFadInfoList().size(); i++) {
-                Label lblFadi = new Label(whiskyBatch.getFadInfoList().get(i));
+            ArrayList<Fad> fade = new ArrayList<>(whiskyBatch.getFadInfo().keySet());
+            for (int i = 0; i < fade.size(); i++) {
+                Label lblFadi = new Label(whiskyBatch.getFadInfo().get(fade.get(i)));
                 lblFadi.setPadding(new Insets(10, 20, 0, 0));
                 expContent.add(lblFadi, i, 7);
                 lblFadi.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-
             }
 
             Separator separator2 = new Separator(Orientation.HORIZONTAL);
             separator2.setPadding(new Insets(20, 0, 20, 0));
             expContent.add(separator2, 0, 8);
 
-            Label lblPåfyld = new Label("Påfyldninger");
+            Label lblPåfyld = new Label("Historie");
             lblPåfyld.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
             expContent.add(lblPåfyld, 0, 9);
 
-            Label lblDestillat = new Label("Destillat information:");
-            lblDestillat.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
-            expContent.add(lblDestillat, 0, 10);
-
-                for (int j = 0; j < whiskyBatch.getDestillatFraPåfyldningerList().size(); j++) {
-                    Label lblDestillati = new Label(whiskyBatch.getDestillatFraPåfyldningerList().get(j));
-                    lblDestillati.setPadding(new Insets(10, 20, 0, 0));
-                    expContent.add(lblDestillati, j, 11);
-                    lblDestillati.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-                }
+            for (int j = 0; j < fade.size(); j++) {
+                Label lblDestillati = new Label(whiskyBatch.getFadHistorie().get(fade.get(j)));
+                lblDestillati.setPadding(new Insets(10, 20, 0, 0));
+                expContent.add(lblDestillati, j, 11);
+                lblDestillati.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+            }
 
             Separator separator3 = new Separator(Orientation.HORIZONTAL);
             separator3.setPadding(new Insets(20, 0, 20, 0));
             expContent.add(separator3, 0, 12);
-
-            Label lblOmhæld = new Label("Omhældninger");
-            lblOmhæld.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-            expContent.add(lblOmhæld, 0, 13);
-
-            Label lblfadInfo = new Label("Fad information:");
-            lblfadInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
-            expContent.add(lblfadInfo, 0, 14);
-
-            for (int i = 0; i < whiskyBatch.getOmældningsFadInfoList().size(); i++) {
-                Label lblOmhældFade = new Label(whiskyBatch.getOmældningsFadInfoList().get(i));
-                lblOmhældFade.setPadding(new Insets(10, 20, 0, 0));
-                expContent.add(lblOmhældFade, i, 15);
-                lblOmhældFade.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-            }
-
-            Separator separator4 = new Separator(Orientation.HORIZONTAL);
-            separator4.setPadding(new Insets(20, 0, 20, 0));
-            expContent.add(separator4, 0, 16);
-
-            Label lblOmhæld1 = new Label("Omhældninger");
-            lblOmhæld1.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-            expContent.add(lblOmhæld1, 0, 17);
-
-            Label lblDestillat1 = new Label("Destillat information:");
-            lblDestillat1.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
-            expContent.add(lblDestillat1, 0, 18);
-
-            for (int i = 0; i < whiskyBatch.getDestialletFraOmhældningerList().size(); i++) {
-                Label lblDestiFraOm = new Label(whiskyBatch.getDestialletFraOmhældningerList().get(i));
-                lblDestiFraOm.setPadding(new Insets(10, 20, 0, 0));
-                expContent.add(lblDestiFraOm, i, 19);
-                lblDestiFraOm.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-            }
 
             alert.getDialogPane().setContent(scrollPane);
             alert.getDialogPane().setPrefSize(800, 600); // Angiver en bredde og højde på Alert-boksen

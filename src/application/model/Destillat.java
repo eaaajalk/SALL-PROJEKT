@@ -115,26 +115,6 @@ public class Destillat {
     public void setMængde(int mængde) {
         this.mængde = mængde;
     }
-
-    public String getInformation() {
-        StringBuilder sb = new StringBuilder();
-        String id = "ID: " + getID();
-        String mængde = "Mængde: " + getMængde();
-        String start = "Startdato: " + getStartDato();
-        String slut = "Slutdato: " + getSlutDato();
-        String alkohol = "Alkoholprocent: " + getAlkoholProcent();
-        String medarbejder = "Medarbejder: " + getMedarbejder().getNavn() + "(ID: " + getMedarbejder().getID() + ")";
-        String kommentar = "Kommentar: " + getKommentar();
-        String vand = "Vandtype: " + getVandType();
-        String maltBatch = "Maltbatch nr: " + getMaltBatch().getBatchNr();
-        String tørv = "Tørv: " + getMaltBatch().getTørv();
-        String kornSort = "Kornsort: " + getMaltBatch().getKornSort();
-        sb.append(id).append("\n").append(mængde).append("L\n").append(start).append("\n").append(slut).append("\n")
-                .append(alkohol).append("\n").append(medarbejder).append("\n").append(kommentar).append("\n").append(vand).append("\n").
-                append(maltBatch).append("\n").append(tørv).append("\n").append(kornSort);
-
-        return sb.toString();
-    }
     public String toString() {
         return (getID() + "       " + getStartDato() + "     " + getSlutDato() + "               " + getMængde());
     }

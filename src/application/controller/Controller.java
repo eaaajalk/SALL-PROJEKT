@@ -289,12 +289,7 @@ public class Controller {
         Påfyldning p2 = controller.createPåfyldning(40, f2, m2, d2,
                 LocalDate.of(2023, 3, 30));
 
-        Omhældning o1 = controller.createOmhældning(f1,20, (LocalDate.of(2023, 3,31)), f2);
 
-        WhiskyBatch w1 = controller.createWhiskyBatch("1", 10, 48,
-                "Første release", LocalDate.of(2026, 5, 31), 60, f2);
-
-        controller.tapPåFlasker(100, LocalDate.now(), 85, 0.7, w1);
 
     }
         public void init() {
